@@ -14,8 +14,8 @@ public class Assets {
     }
 
     public static void load() {
-	background = loadTexture("background.png");
-	backgroundRegion = new TextureRegion(background, 0, 0, 320, 480);
+	background = loadTexture("pattern2.png");
+	backgroundRegion = new TextureRegion(background, 0, 0, 354, 354);
     }
 
 }

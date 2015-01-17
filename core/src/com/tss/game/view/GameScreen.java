@@ -30,8 +30,8 @@ public class GameScreen implements Screen, Constants, Commands {
     touchPoint = new Vector3();
     this.board = new Board();
     socket.connect();
-    guiCam = new OrthographicCamera(GRAPHICS_WIDTH, GRAPHICS_HEIGHT);
-    guiCam.position.set(GRAPHICS_WIDTH / 2, GRAPHICS_HEIGHT / 2, 0);
+    guiCam = new OrthographicCamera(WIDTH, HEIGHT);
+    guiCam.position.set(WIDTH / 2, HEIGHT / 2, 0);
 
   }
 
