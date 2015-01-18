@@ -29,22 +29,25 @@ public class GameRenderer extends SpriteBatch implements Constants {
 	draw(Assets.backgroundRegion, 0, 354, 354, 354);
 	end();
     }
+    
+    public void render(Board board) {
+	renderBackground();	
+	renderBoard(board);
+    }
 
     public void renderBoard(Board board) {
-	enableBlending();
-
-	begin();
 	drawCells(board.getCells());
-	// drawDices(board.getDices());
-
-	end();
+	drawDices(board.getDices());
     }
 
     private void drawDices(LinkedList<Dice> dices) {
-	TextureRegion reg = null;
 	for (Dice dice : dices) {
-	    //draw(reg, dice.x, dice.y, DICE_SIZE, DICE_SIZE);
+	    drawDice(dice);
 	}
+    }
+
+    private void drawDice(Dice dice) {
+	
     }
 
     private void drawCells(Cell[] cells) {
