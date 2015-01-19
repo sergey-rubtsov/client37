@@ -2,14 +2,25 @@ package com.tss.game.model;
 
 import com.tss.game.Constants;
 
-public class Cell implements Point {
+public class Cell implements Point, Constants { 
+    
+    public final static float y23 = yUnit;
+    public final static float x32 = xUnit;
+    public final static float y31 = 0;
+    public final static float x13 = -2 * xUnit;
+    public final static float det = y23 * x13 - x32 * y31;
+    public final static float minD = Math.min(det, 0);
+    public final static float maxD = Math.max(det, 0);
+    public final static float invdet = x32 * y31 - y23 * x13;
+    public final static float invminD = Math.min(invdet, 0);
+    public final static float invmaxD = Math.max(invdet, 0);
 
     private final int index;
 
     private int color;
 
     public void setColor(int color) {
-	if (color >= Constants.CELL_COLOR.length) {
+	if (color >= CELL_COLOR.length) {
 	    color = 0;
 	    return;
 	}
@@ -59,6 +70,43 @@ public class Cell implements Point {
 
     public void setDice(Dice dice) {
 	this.dice = dice;
+    }
+    
+    public boolean contains(float x, float y) {
+	return (x >= bl.x && x <= br.x && y >= bl.y && y <= tl.y) || 
+	barycentricTopTriangleContains(x, y, tr) ||
+	barycentricBotTriangleContains(x, y, br); 
+
+    }
+    
+    private static boolean barycentricTopTriangleContains(float x, float y, Point p) {	
+	float dx = x - p.getX();
+	float dy = y - p.getY();
+	float a = y23 * dx + x32 * dy;
+        if (a < minD || a > maxD)
+            return false;
+        float b = y31 * dx + x13 * dy;
+        if (b < minD || b > maxD)
+            return false;
+        float c = det - a - b;
+        if (c < minD || c > maxD)
+            return false;
+	return true;
+    }
+    
+    private static boolean barycentricBotTriangleContains(float x, float y, Point p) {	
+	float dx = x - p.getX();
+	float dy = y - p.getY();
+	float a = x32 * dy - y23 * dx;
+        if (a < invminD || a > invmaxD)
+            return false;
+        float b = y31 * dx + x13 * dy;
+        if (b < invminD || b > invmaxD)
+            return false;
+        float c = invdet - a - b;
+        if (c < invminD || c > invmaxD)
+            return false;
+	return true;
     }
 
     public Vertex getT() {

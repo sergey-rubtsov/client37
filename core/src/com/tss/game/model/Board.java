@@ -3,6 +3,8 @@ package com.tss.game.model;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import javax.swing.JButton;
+
 import com.tss.game.Constants;
 
 public class Board implements Constants {
@@ -20,11 +22,18 @@ public class Board implements Constants {
     private Cell[] cells;
 
     private LinkedList<Dice> dices;
+    
+    private int horizontalPosition;
+    
+    private int verticalPosition;
 
-    public Board(float xUnit, float yUnit, int xShift, int yShift) {
+    public Board(float xUnit, float yUnit, int verticalPosition, int horizontalPosition) {
+	this.verticalPosition = verticalPosition;
+	this.horizontalPosition = horizontalPosition;
 	this.dices = new LinkedList<Dice>();
-	Builder b = new Builder(yShift, xUnit, yUnit);
+	Builder b = new Builder(horizontalPosition, xUnit, yUnit);
 	this.cells = b.getCells();
+	JButton bt = new JButton();
     }
 
     public Board() {
@@ -71,5 +80,21 @@ public class Board implements Constants {
 
     public static float delta(float a, float b) {
 	return Math.abs(a - b);
+    }
+
+    public int getHorizontalPosition() {
+	return horizontalPosition;
+    }
+
+    public void setHorizontalPosition(int horizontalPosition) {
+	this.horizontalPosition = horizontalPosition;
+    }
+
+    public int getVerticalPosition() {
+	return verticalPosition;
+    }
+
+    public void setVerticalPosition(int verticalPosition) {
+	this.verticalPosition = verticalPosition;
     }
 }

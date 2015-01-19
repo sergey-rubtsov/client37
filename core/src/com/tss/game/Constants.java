@@ -31,12 +31,14 @@ public interface Constants {
     public final Color CCCOLOR = new Color(1f, 0.2f, 0f, 1);
     public final Color CBCOLOR = new Color(0.1f, 0.1f, 0.1f, 1);
 
-    public final Color[] CELL_COLOR = { CCCOLOR, CMCOLOR, CBCOLOR };
+    
 
     public final Color CELLCOLOR = new Color(1f, 0f, 0f, 1);
     public final Color MENUCOLOR = new Color(0.5f, 0.5f, 0.9f, 1);
     public final Color DEFCOLOR = new Color(0.6f, 0.6f, 0.6f, 1);
-
+    
+    public final Color[] CELL_COLOR = { CCCOLOR, CMCOLOR, CBCOLOR, CELLCOLOR, MENUCOLOR, DEFCOLOR };
+    
     public final Color RED_DICE_COLOR = new Color(0.9f, 0f, 0f, 1);
     public final Color GREEN_DICE_COLOR = new Color(0f, 0.9f, 0f, 1);
     public final Color BLUE_DICE_COLOR = new Color(0f, 0f, 0.9f, 1);

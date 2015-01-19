@@ -10,11 +10,12 @@ import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.tss.game.Client;
-import com.tss.game.Commands;
 import com.tss.game.Constants;
-import com.tss.game.GameSocket;
+import com.tss.game.control.Commands;
+import com.tss.game.control.GameProcessor;
+import com.tss.game.control.GameSocket;
 import com.tss.game.model.Board;
-import com.tss.game.model.GameProcessor;
+import com.tss.game.model.Cell;
 
 public class GameScreen implements Screen, Constants, Commands {
     
@@ -28,10 +29,6 @@ public class GameScreen implements Screen, Constants, Commands {
     Board board;
     Vector3 touchPoint;
     
-    public interface TouchListener {
-	public void touch(Vector3 touchPoint);
-    }
-
     public GameScreen(Client client) {
 	this.client = client;
 	this.board = new Board();
@@ -72,7 +69,12 @@ public class GameScreen implements Screen, Constants, Commands {
     }
 
     private void processTouch(Vector3 touchPoint2) {
-      game.touch(board.getProximate(touchPoint.x, touchPoint.y));      
+	Cell cell = board.getProximate(touchPoint.x, touchPoint.y);
+	if (cell.contains(touchPoint.x, touchPoint.y)) {
+	    game.touch(cell);            
+	} else {
+	    
+	}
     }
 
     private void draw() {

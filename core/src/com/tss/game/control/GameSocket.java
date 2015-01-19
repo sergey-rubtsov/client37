@@ -1,4 +1,4 @@
-package com.tss.game;
+package com.tss.game.control;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -11,20 +11,18 @@ public class GameSocket extends WebSocketClient {
 
     private SocketListener listener;
 
-    public interface SocketListener {
-	public void messageReceived(String message);
-    }
-
     public GameSocket(SocketListener game) throws URISyntaxException {
 	super(new URI(Commands.SERVER_URL), new Draft_10());
 	this.listener = game;
+	this.listener.setSocket(this);
     }
 
     @Override
     public void onOpen(ServerHandshake handshakedata) {
+	listener.opened();
     }
 
-    public void setListener(SocketListener listener) {
+    public void addListener(SocketListener listener) {
 	this.listener = listener;
     }
 
@@ -35,6 +33,7 @@ public class GameSocket extends WebSocketClient {
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
+	listener.closed();
     }
 
     @Override
