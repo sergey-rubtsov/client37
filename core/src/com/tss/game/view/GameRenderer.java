@@ -2,16 +2,13 @@ package com.tss.game.view;
 
 import java.util.LinkedList;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.tss.game.Constants;
 import com.tss.game.model.Board;
 import com.tss.game.model.Cell;
 import com.tss.game.model.Dice;
-import com.tss.game.model.Point;
 
 public class GameRenderer extends SpriteBatch implements Constants {
 
@@ -80,21 +77,6 @@ public class GameRenderer extends SpriteBatch implements Constants {
 	renderer.begin(ShapeType.Line);
 	renderer.setColor(CBCOLOR);	
 	renderer.polygon(vertices);
-	renderer.end();
-    }
-
-    public void fillRectangle(float x, float y, float width, float height,
-	    Color color) {
-	renderer.begin(ShapeType.Filled);
-	renderer.setColor(color);
-	renderer.rect(x + width / 2, y + height / 2, width, height);
-	renderer.end();
-    }
-
-    public void drawTriangle(Point a, Point b, Point c, Color color) {
-	renderer.setColor(color);
-	renderer.begin(ShapeType.Filled);	
-	//renderer.triangle(a.x, a.y, b.x, b.y, c.x, c.y, color, color, color);
 	renderer.end();
     }
 

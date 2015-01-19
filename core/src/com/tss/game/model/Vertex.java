@@ -18,5 +18,6 @@ public class Vertex implements Point {
 
     public float getY() {
         return y;
-    }    
+    }
+  
 }

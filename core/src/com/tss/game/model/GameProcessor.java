@@ -47,7 +47,15 @@ public class GameProcessor implements SocketListener, TouchListener {
 
     @Override
     public void touch(Vector3 touchPoint) {
-	
+      
+    }
+
+    public void touch(Cell cell) {
+      if (cell != null) {
+        int c = cell.getColor();
+        c++;
+        cell.setColor(c);
+      }
     }
     
     

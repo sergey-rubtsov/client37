@@ -8,14 +8,14 @@ import org.java_websocket.drafts.Draft_10;
 import org.java_websocket.handshake.ServerHandshake;
 
 public class GameSocket extends WebSocketClient {
-    
+
     private SocketListener listener;
-    
+
     public interface SocketListener {
 	public void messageReceived(String message);
     }
 
-    public GameSocket(SocketListener game) throws URISyntaxException {	
+    public GameSocket(SocketListener game) throws URISyntaxException {
 	super(new URI(Commands.SERVER_URL), new Draft_10());
 	this.listener = game;
     }
@@ -23,7 +23,7 @@ public class GameSocket extends WebSocketClient {
     @Override
     public void onOpen(ServerHandshake handshakedata) {
     }
-    
+
     public void setListener(SocketListener listener) {
 	this.listener = listener;
     }

@@ -7,7 +7,6 @@ import org.java_websocket.WebSocket.READYSTATE;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.FPSLogger;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.tss.game.Client;
@@ -61,15 +60,19 @@ public class GameScreen implements Screen, Constants, Commands {
     public void render(float delta) {
 	update(delta);
 	draw();
-	fps.log();
+	//fps.log();
     }
 
     private void update(float delta) {
-	if (Gdx.input.justTouched()) {
+      if (Gdx.input.justTouched()) {
 	    guiCam.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(),
 		    0));
-	    game.touch(touchPoint);
-	}
+	    processTouch(touchPoint);	    
+	  }
+    }
+
+    private void processTouch(Vector3 touchPoint2) {
+      game.touch(board.getProximate(touchPoint.x, touchPoint.y));      
     }
 
     private void draw() {
