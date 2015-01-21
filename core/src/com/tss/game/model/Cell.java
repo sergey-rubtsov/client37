@@ -70,13 +70,19 @@ public class Cell implements Point, Constants {
 
     public void setDice(Dice dice) {
 	this.dice = dice;
+	this.dice.setCell(this);
+    }
+    
+    public void reset() {
+	this.dice.reset();
+	this.dice.setCell(null);
+	this.dice = null;
     }
     
     public boolean contains(float x, float y) {
 	return (x >= bl.x && x <= br.x && y >= bl.y && y <= tl.y) || 
 	barycentricTopTriangleContains(x, y, tr) ||
-	barycentricBotTriangleContains(x, y, br); 
-
+	barycentricBotTriangleContains(x, y, br);
     }
     
     private static boolean barycentricTopTriangleContains(float x, float y, Point p) {	

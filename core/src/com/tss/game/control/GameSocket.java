@@ -14,7 +14,6 @@ public class GameSocket extends WebSocketClient {
     public GameSocket(SocketListener game) throws URISyntaxException {
 	super(new URI(Commands.SERVER_URL), new Draft_10());
 	this.listener = game;
-	this.listener.setSocket(this);
     }
 
     @Override

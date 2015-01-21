@@ -14,6 +14,8 @@ public class Dice {
 
     private Status status;
 
+    private Cell cell;
+    
     private Number number;
 
     private Player owner;
@@ -58,5 +60,18 @@ public class Dice {
 
     public void setOwner(Player owner) {
 	this.owner = owner;
+    }
+
+    public Cell getCell() {
+	return cell;
+    }
+
+    public void setCell(Cell cell) {
+	this.cell = cell;
+    }
+
+    public void reset() {
+	// TODO Auto-generated method stub
+	
     }
 }

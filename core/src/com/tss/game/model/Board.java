@@ -3,11 +3,11 @@ package com.tss.game.model;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import javax.swing.JButton;
-
 import com.tss.game.Constants;
+import com.tss.game.control.BoardListener;
+import com.tss.game.control.ControllerListener;
 
-public class Board implements Constants {
+public class Board implements Constants, ControllerListener {
 
     /**  
      *       board index is:
@@ -26,6 +26,16 @@ public class Board implements Constants {
     private int horizontalPosition;
     
     private int verticalPosition;
+    
+    private BoardListener listener;
+
+    public BoardListener getListener() {
+        return listener;
+    }
+
+    public void setListener(BoardListener listener) {
+        this.listener = listener;
+    }
 
     public Board(float xUnit, float yUnit, int verticalPosition, int horizontalPosition) {
 	this.verticalPosition = verticalPosition;
@@ -33,7 +43,6 @@ public class Board implements Constants {
 	this.dices = new LinkedList<Dice>();
 	Builder b = new Builder(horizontalPosition, xUnit, yUnit);
 	this.cells = b.getCells();
-	JButton bt = new JButton();
     }
 
     public Board() {
@@ -96,5 +105,47 @@ public class Board implements Constants {
 
     public void setVerticalPosition(int verticalPosition) {
 	this.verticalPosition = verticalPosition;
+    }
+
+    public void touch(float x, float y) {
+	Cell cell = getProximate(x, y);
+	if (cell.contains(x, y)) {
+	    Dice dice = cell.getDice();
+	    if (dice != null) {
+		listener.pickUp(dice);
+	    } else {
+		listener.touch(cell);
+	    }
+	}
+    }
+
+    @Override
+    public void roll(Dice dice) {
+	// TODO Auto-generated method stub
+	
+    }
+
+    @Override
+    public void removeDice(Dice dice) {
+	// TODO Auto-generated method stub
+	
+    }
+
+    @Override
+    public void lockDice(Dice dice) {
+	// TODO Auto-generated method stub
+	
+    }
+
+    @Override
+    public void unlockDice(Dice dice) {
+	// TODO Auto-generated method stub
+	
+    }
+
+    @Override
+    public void resetGame() {
+	// TODO Auto-generated method stub
+	
     }
 }

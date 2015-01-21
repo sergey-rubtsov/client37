@@ -1,80 +1,58 @@
 package com.tss.game.control;
 
+import java.net.URISyntaxException;
+import java.util.LinkedList;
+import java.util.Queue;
+
+import org.java_websocket.WebSocket.READYSTATE;
+
 import com.tss.game.model.Board;
 import com.tss.game.model.Cell;
-import com.tss.game.view.GameScreen;
+import com.tss.game.model.Dice;
 
-public class GameProcessor implements SocketListener {
-
-    public interface GameListener {
-
-	public void drugDice();
-
-	public void dropDice();
-
-	public void newGame();
-    }
+public class GameProcessor implements SocketListener, BoardListener {
     
     Board board;
     
-    GameScreen gameScreen;
+    ControllerListener listener;
     
-    GameSocket gameSocket;
-
-    private Status status;
+    GameSocket socket;
+    
+    Queue<Command> commands;
     
     private boolean connectionOpened;
-
-    public enum Status {
-	SENDING, RECEIVING, EXECUTING, WAITING_ACTION
-    }
     
-    public GameProcessor(GameScreen gameScreen, Board board) {
+    public GameProcessor() {
 	setConnectionOpened(false);
-	this.gameScreen = gameScreen;
-	this.board = board;
-	this.status = Status.WAITING_ACTION;
+	try {
+	    socket = new GameSocket(this);
+	} catch (URISyntaxException e) {
+	    
+	}
+	socket.connect();
+	commands = new LinkedList<Command>();
+    }    
+
+    public ControllerListener getListener() {
+        return listener;
     }
 
-    public Status getStatus() {
-	return status;
-    }
-
-    public void setStatus(Status status) {
-	this.status = status;
+    public void setListener(ControllerListener listener) {
+        this.listener = listener;
     }
 
     @Override
     public void messageReceived(String message) {	
 	System.out.println(message);
     }
-    
-    public void sendMessage(String message) {
-	this.gameSocket.send(message);
-    }
 
-    public void touch(Cell cell) {
-      if (cell != null) {
-	sendMessage(Commands.PING);
-	int col = cell.getColor();
-	col++;
-        cell.setColor(col);
-      }
-    }
-
-    @Override
-    public void setSocket(GameSocket gameSocket) {
-	this.gameSocket = gameSocket;
+    public void execute(Dice dice) {
+	listener.lockDice(dice);
     }
 
     @Override
     public void opened() {
 	setConnectionOpened(true);	
-    }
-
-    @Override
-    public void closed() {
-	setConnectionOpened(false);	
     }
 
     public boolean isConnectionOpened() {
@@ -85,6 +63,36 @@ public class GameProcessor implements SocketListener {
 	this.connectionOpened = connectionOpened;
     }
     
-    
+    public void update() {
+	if (!commands.isEmpty()) {
+            Command c = commands.peek();
+            c.execute();
+            commands.remove();            
+        }
+    }
 
+    @Override
+    public void pickUp(Dice dice) {
+	//listener.
+    }
+
+    @Override
+    public void touch(Cell cell) {
+	
+    }
+
+    @Override
+    public void closed() {
+		
+    }
+
+    public void close() {
+	socket.close();	
+    }
+    
+	//if (this.socket.getReadyState() == READYSTATE.OPEN) {
+	    //this.socket.send(PING);
+	//}
+    
+    
 }
