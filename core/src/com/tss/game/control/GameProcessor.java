@@ -88,7 +88,7 @@ public class GameProcessor implements SocketListener, BoardListener, InputListen
 
     @Override
     public void input(String text) {
-	
+	commands.add(new SendCommand(text, socket));
     }
 
     @Override
