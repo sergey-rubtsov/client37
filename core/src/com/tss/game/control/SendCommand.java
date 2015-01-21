@@ -1,10 +1,10 @@
 package com.tss.game.control;
 
-public class MessageCommand implements Command {
+public class SendCommand implements Command {
     
     String message;
 
-    public MessageCommand(String message) {
+    public SendCommand(String message) {
 	this.message = message;
     }
 

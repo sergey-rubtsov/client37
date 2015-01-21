@@ -10,11 +10,11 @@ import com.tss.game.model.Board;
 import com.tss.game.model.Cell;
 import com.tss.game.model.Dice;
 
-public class GameProcessor implements SocketListener, BoardListener {
+public class GameProcessor implements SocketListener, BoardListener, InputListener {
     
     Board board;
     
-    ControllerListener listener;
+    ControllerListener controllerListener;
     
     GameSocket socket;
     
@@ -34,20 +34,16 @@ public class GameProcessor implements SocketListener, BoardListener {
     }    
 
     public ControllerListener getListener() {
-        return listener;
+        return controllerListener;
     }
 
     public void setListener(ControllerListener listener) {
-        this.listener = listener;
+        this.controllerListener = listener;
     }
 
     @Override
-    public void messageReceived(String message) {	
-	System.out.println(message);
-    }
-
-    public void execute(Dice dice) {
-	listener.lockDice(dice);
+    public void messageReceived(String message) {
+	commands.add(new ReceiveCommand(message, controllerListener));	
     }
 
     @Override
@@ -89,10 +85,20 @@ public class GameProcessor implements SocketListener, BoardListener {
     public void close() {
 	socket.close();	
     }
+
+    @Override
+    public void input(String text) {
+	
+    }
+
+    @Override
+    public void click(Button button) {
+	
+    }
     
-	//if (this.socket.getReadyState() == READYSTATE.OPEN) {
-	    //this.socket.send(PING);
-	//}
+    //if (this.socket.getReadyState() == READYSTATE.OPEN) {
+    	//this.socket.send(PING);
+    //}
     
     
 }
