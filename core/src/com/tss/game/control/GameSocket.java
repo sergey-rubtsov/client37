@@ -10,6 +10,10 @@ import org.java_websocket.handshake.ServerHandshake;
 public class GameSocket extends WebSocketClient {
 
     private SocketListener listener;
+    
+    public GameSocket() throws URISyntaxException {
+	super(new URI(Commands.SERVER_URL), new Draft_10());
+    }
 
     public GameSocket(SocketListener listener) throws URISyntaxException {
 	super(new URI(Commands.SERVER_URL), new Draft_10());

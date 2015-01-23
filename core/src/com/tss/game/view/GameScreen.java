@@ -8,12 +8,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.tss.game.Client;
 import com.tss.game.Constants;
 import com.tss.game.control.Commands;
 import com.tss.game.control.GameProcessor;
 import com.tss.game.control.GameSocket;
+import com.tss.game.control.InputListener.Button;
 import com.tss.game.model.Board;
 
 public class GameScreen implements Screen, Constants, Commands {
@@ -24,6 +26,7 @@ public class GameScreen implements Screen, Constants, Commands {
     GameRenderer batcher;
     GameProcessor controller;
     Board board;
+    Rectangle diceButtonBounds;
     Vector3 touchPoint;
     
     public GameScreen(Client client) {
@@ -36,6 +39,8 @@ public class GameScreen implements Screen, Constants, Commands {
 	touchPoint = new Vector3();
 	guiCam = new OrthographicCamera(WIDTH, HEIGHT);
 	guiCam.position.set(WIDTH / 2, HEIGHT / 2, 0);
+	//diceButtonBounds = new Rectangle(WIDTH / 3, BOARD_Y_END - TOP_HEIGHT / 4, WIDTH / 6, TOP_HEIGHT / 2);
+	diceButtonBounds = new Rectangle(320 - 64, 480 - 64, 64, 64);
 	fps = new FPSLogger();
     }
 
@@ -60,11 +65,17 @@ public class GameScreen implements Screen, Constants, Commands {
     }
 
     private void processTouch(Vector3 touchPoint2) {
-	board.touch(touchPoint.x, touchPoint.y);
+	if (diceButtonBounds.contains(touchPoint.x, touchPoint.y)) {
+	    controller.click(Button.DICE);
+	} else {
+	    board.touch(touchPoint.x, touchPoint.y);
+	}
+	
     }
 
     private void draw() {
 	batcher.render(board);
+	batcher.render(diceButtonBounds);
 	guiCam.update();
 	batcher.setProjectionMatrix(guiCam.combined);
     }

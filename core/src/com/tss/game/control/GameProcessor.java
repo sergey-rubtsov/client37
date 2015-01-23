@@ -74,7 +74,7 @@ public class GameProcessor implements SocketListener, BoardListener, InputListen
 
     @Override
     public void touch(Cell cell) {
-	
+	System.out.println(cell.getIndex());
     }
 
     @Override
@@ -93,6 +93,7 @@ public class GameProcessor implements SocketListener, BoardListener, InputListen
 
     @Override
     public void click(Button button) {
+	System.out.println(button.ordinal());
 	
     }
     

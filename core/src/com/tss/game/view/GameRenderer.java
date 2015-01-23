@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Rectangle;
 import com.tss.game.Constants;
 import com.tss.game.model.Board;
 import com.tss.game.model.Cell;
@@ -84,6 +85,14 @@ public class GameRenderer extends SpriteBatch implements Constants {
     public void dispose() {
 	super.dispose();
 	renderer.dispose();
+    }
+
+    public void render(Rectangle diceButtonBounds) {
+	disableBlending();
+	begin();
+	draw(Assets.button, 320 - 64, 480 - 64, 64, 64);
+	//draw(Assets.button, diceButtonBounds.getX(), diceButtonBounds.getY(), diceButtonBounds.getWidth(), diceButtonBounds.getHeight());
+	end();
     }
 
 }
