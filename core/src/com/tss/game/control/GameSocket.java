@@ -33,7 +33,7 @@ public class GameSocket extends WebSocketClient {
 
     @Override
     public void onMessage(String message) {
-	listener.messageReceived(message);
+	listener.receive(message);
     }
 
     @Override

@@ -2,7 +2,10 @@ package com.tss.game.view;
 
 import java.util.LinkedList;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
@@ -29,11 +32,14 @@ public class GameRenderer extends SpriteBatch implements Constants {
     }
     
     public void render(Board board) {
+	GL20 gl = Gdx.gl;
+	gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	renderBackground();	
 	renderBoard(board);
     }
 
     public void renderBoard(Board board) {
+	enableBlending();
 	drawCells(board.getCells());
 	drawDices(board.getDices());
     }
@@ -46,10 +52,8 @@ public class GameRenderer extends SpriteBatch implements Constants {
 
     private void drawDice(Dice dice) {
 	renderer.begin(ShapeType.Filled);
-	renderer.setColor(dice.getOwner().getColor());	
-
+	renderer.setColor(dice.getOwner().getColor());
 	renderer.rect(dice.getCell().getBL().x, dice.getCell().getBL().y, xUnit * 2, yUnit * 2);
-
 	renderer.end();		
     }
 
@@ -92,11 +96,9 @@ public class GameRenderer extends SpriteBatch implements Constants {
 	renderer.dispose();
     }
 
-    public void render(Rectangle diceButtonBounds) {
-	disableBlending();
-	begin();
-	//draw(Assets.button, 320 - 64, 480 - 64, 64, 64);
-	draw(Assets.button, diceButtonBounds.getX(), diceButtonBounds.getY(), diceButtonBounds.getWidth(), diceButtonBounds.getHeight());
+    public void render(TextureRegion button, Rectangle diceButtonBounds) {	
+	begin();	
+	draw(button, diceButtonBounds.getX(), diceButtonBounds.getY(), diceButtonBounds.getWidth(), diceButtonBounds.getHeight());
 	end();
     }
 

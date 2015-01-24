@@ -112,7 +112,7 @@ public class Board implements Constants, ControllerListener {
 	if (cell.contains(x, y)) {
 	    Dice dice = cell.getDice();
 	    if (dice != null) {
-		listener.pickUp(dice);
+		listener.take(dice);
 	    } else {
 		listener.touch(cell);
 	    }

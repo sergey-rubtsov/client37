@@ -9,173 +9,153 @@ import org.java_websocket.WebSocket.READYSTATE;
 import com.tss.game.control.commands.Command;
 import com.tss.game.control.commands.ReceiveCommand;
 import com.tss.game.control.commands.ReceiveCommand.ReceiveCommandListener;
-import com.tss.game.control.commands.SendMessageCommand;
+import com.tss.game.control.commands.SendCommand;
+import com.tss.game.control.commands.SendCommand.SendCommandListener;
 import com.tss.game.model.Board;
 import com.tss.game.model.Cell;
 import com.tss.game.model.Dice;
 import com.tss.game.model.GameState;
-import com.tss.game.model.Player;
 
-public class GameProcessor implements SocketListener, BoardListener, InputListener, ReceiveCommandListener {
-    
+public class GameProcessor implements SocketListener, BoardListener,
+	InputListener, ReceiveCommandListener, SendCommandListener {
+
     Board board;
-    
+
     ControllerListener controllerListener;
-    
+
     GameSocket socket;
-    
-    GameState state;
-    
+
     Queue<Command> commands;
     
-    private boolean connectionOpened;
-    
+    GameState state;
+
     public GameProcessor() {
-	setConnectionOpened(false);
 	try {
 	    socket = new GameSocket(this);
 	} catch (URISyntaxException e) {
-	    
+
 	}
 	socket.connect();
-	this.state = new GameState();
+	state = new GameState();
 	commands = new LinkedList<Command>();
-    }    
+    }
 
     public ControllerListener getListener() {
-        return controllerListener;
+	return controllerListener;
     }
 
     public void setListener(ControllerListener listener) {
-        this.controllerListener = listener;
+	this.controllerListener = listener;
     }
 
     @Override
-    public void messageReceived(String message) {
-	commands.add(new ReceiveCommand(message, this));	
+    public void receive(String message) {
+	commands.add(new ReceiveCommand(message, this));
     }
 
-    @Override
-    public void opened() {
-	setConnectionOpened(true);	
-    }
-
-    public boolean isConnectionOpened() {
-	return connectionOpened;
-    }
-
-    public void setConnectionOpened(boolean connectionOpened) {
-	this.connectionOpened = connectionOpened;
-    }
-    
     public void update() {
 	if (!commands.isEmpty()) {
-            Command c = commands.peek();
-            c.execute();
-            commands.remove();            
-        }
+	    Command c = commands.peek();
+	    c.execute();
+	    commands.remove();
+	}
     }
 
     @Override
-    public void pickUp(Dice dice) {
-	//listener.
+    public void take(Dice dice) {
+	take(dice.getCell().getIndex());
     }
 
     @Override
     public void touch(Cell cell) {
-	System.out.println(cell.getIndex());
+	if (cell.getDice() != null) {
+	    take(cell.getDice());
+	    return;
+	}
+	move(cell);
+    }
+
+    public void close() {
+	socket.close();
+    }
+
+    @Override
+    public void opened() {
     }
 
     @Override
     public void closed() {
-		
+    }
+    
+    public void take() {
+	take(0);
     }
 
-    public void close() {
-	socket.close();	
+    // sent: take2 0
+    // 0 - we roll a spare die
+    // not 0 - we take dice from board
+    public void take(int hex) {
+	final String text = state.getStep() + " " + hex;
+	commands.add(new SendCommand("take" + text, this));
+    };
+
+    // sent: move2 41
+    // we put the die to hex41
+    public void move(Cell cell) {
+	final String text = state.getStep() + " " + cell.getIndex();
+	commands.add(new SendCommand("move" + text, this));
+    };
+
+    // sent: quit
+    // we give up
+    public void quit() {
+	commands.add(new SendCommand("quit", this));
+    };
+
+    // sent: bot2
+    // we start a game with the bot
+    public void bot() {
+	commands.add(new SendCommand("bot2", this));
     }
 
     @Override
-    public void input(String text) {
-	commands.add(new SendMessageCommand(text, null, socket));
+    public void send(String send) {
+	//if (this.socket.getReadyState() == READYSTATE.OPEN) 
+	this.socket.send(send);    
     }
-    
-    //sent: bot2 // we start a game with the bot
-    public void bot() {
-	
-    }
-    
-    //received: game 2 bot;anonymous		
-    //state transition to "GAME" we are the player #2 
+
+    @Override
     public void game(String[] playersId) {
 	
     }
-    
-    //received: sync 1 1 from 12 log		
-    //every game starts with the "sync" for uniformity
-    //sync <step::int> <current_seat::int> from <your_dice:int> log <seat> <from_hex> <die_face> <to_hex> ...
-    public void sync(int step) {
-	
-    }
-    
-    //received: from 1 0 1			
-    //bot rolls his spare die -- face 1 came up
-    public void from(int step, Player player, Dice dice) {
-	
-    }
-    
-    //received: to 1 49			
-    //bot puts the die to the hex49
-    public void to(int step, Cell cell) {
-	
-    }
-    
-    //received: next 1 2			
-    //end of bot's turn
-    public void next(int step) {}
-    
-    //sent: take2 0
-    //we roll a spare die
-    public void take(int step) {
-	
-    }
-    
-    //sent: move2 41				
-    // we put the die to hex41 
-    public void move(int step, Cell cell) {
-	
-    }    
-    
-    //sent: quit				
-    //we give up
-    public void quit() {
-	
-    }
-    
-    //received: eog 6 quit 2 winners 1	
-    //bot declared a victor    
-    public void eog(int step) {
-	
-    }
-
-    //received: lobby	
-    public void lobby() {
-	
-    }
-    
 
     @Override
-    public void click(Button button) {
-	//commands.add(new SendMessageCommand(PING, null, socket));	
+    public void sync(int step, int currentSeat, int yourDice, String[] args) {
+	state.setStep(step);
     }
-    
-    public void newGame(Player[] players) {
-	this.state = new GameState(players);
+
+    @Override
+    public void from(int step, int cell, int dice) {
+	state.setStep(step);
     }
-    
-    //if (this.socket.getReadyState() == READYSTATE.OPEN) {
-    	//this.socket.send(PING);
-    //}
-    
-    
+
+    @Override
+    public void to(int step, int hex) {
+	state.setStep(step);
+    }
+
+    @Override
+    public void next(int step) {
+	step++;
+	state.setStep(step);
+	//state
+    }
+
+    @Override
+    public void eog(int step, int p, int w) {
+    }
+
+    @Override
+    public void lobby() {
+    };
 }

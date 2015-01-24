@@ -3,7 +3,7 @@ package com.tss.game.control.commands;
 import com.tss.game.control.GameSocket;
 import com.tss.game.model.Player;
 
-public class SendMessageCommand implements Command {
+public class MessageCommand implements Command {
     
     String message;
     
@@ -11,7 +11,7 @@ public class SendMessageCommand implements Command {
     
     Player player;
 
-    public SendMessageCommand(String message, Player player, GameSocket socket) {
+    public MessageCommand(String message, Player player, GameSocket socket) {
 	this.message = message;
 	this.player = player;
 	this.socket = socket;

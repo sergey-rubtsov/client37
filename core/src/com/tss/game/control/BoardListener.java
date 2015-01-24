@@ -5,7 +5,7 @@ import com.tss.game.model.Dice;
 
 public interface BoardListener {
 
-    void pickUp(Dice dice);
+    void take(Dice dice);
 
     void touch(Cell cell);    
 

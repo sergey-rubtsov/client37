@@ -9,7 +9,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.tss.game.Client;
 import com.tss.game.Constants;
 import com.tss.game.control.GameProcessor;
-import com.tss.game.control.InputListener.Button;
 import com.tss.game.control.commands.Commands;
 import com.tss.game.model.Board;
 
@@ -21,7 +20,9 @@ public class GameScreen implements Screen, Constants, Commands {
     GameRenderer batcher;
     GameProcessor controller;
     Board board;
-    Rectangle diceButtonBounds;
+    Rectangle newGameButtonBounds;
+    Rectangle rollButtonBounds;
+    Rectangle giveUpButtonBounds;
     Vector3 touchPoint;
     
     public GameScreen(Client client) {
@@ -34,8 +35,9 @@ public class GameScreen implements Screen, Constants, Commands {
 	touchPoint = new Vector3();
 	guiCam = new OrthographicCamera(WIDTH, HEIGHT);
 	guiCam.position.set(WIDTH / 2, HEIGHT / 2, 0);
-	diceButtonBounds = new Rectangle(WIDTH / 6, BOARD_Y_END - TOP_HEIGHT / 4, WIDTH / 12, TOP_HEIGHT / 2);
-	//diceButtonBounds = new Rectangle(320 - 64, 480 - 64, 64, 64);
+	newGameButtonBounds = new Rectangle(WIDTH / 6, BOARD_Y_END - TOP_HEIGHT / 4, WIDTH / 12, WIDTH / 12);
+	giveUpButtonBounds = new Rectangle(WIDTH / 2, BOARD_Y_END - TOP_HEIGHT / 4, WIDTH / 12, WIDTH / 12);
+	rollButtonBounds = new Rectangle(WIDTH * 5 / 6, BOARD_Y_END - TOP_HEIGHT / 4, WIDTH / 12, WIDTH / 12);
 	fps = new FPSLogger();
     }
 
@@ -60,9 +62,14 @@ public class GameScreen implements Screen, Constants, Commands {
     }
 
     private void processTouch(Vector3 touchPoint2) {
-	if (diceButtonBounds.contains(touchPoint.x, touchPoint.y)) {
-	    controller.click(Button.DICE);
-	} else {
+	if (rollButtonBounds.contains(touchPoint.x, touchPoint.y)) {
+	    controller.take();
+	} else if (newGameButtonBounds.contains(touchPoint.x, touchPoint.y)) {
+	    controller.bot();
+	} else if (giveUpButtonBounds.contains(touchPoint.x, touchPoint.y)) {
+	    controller.quit();
+	}
+	    else {
 	    board.touch(touchPoint.x, touchPoint.y);
 	}
 	
@@ -70,7 +77,10 @@ public class GameScreen implements Screen, Constants, Commands {
 
     private void draw() {
 	batcher.render(board);
-	batcher.render(diceButtonBounds);
+	batcher.render(Assets.buttonRoll, rollButtonBounds);
+	batcher.render(Assets.buttonGiveUp, newGameButtonBounds);
+	batcher.render(Assets.buttonStart, giveUpButtonBounds);
+	
 	guiCam.update();
 	batcher.setProjectionMatrix(guiCam.combined);
     }

@@ -1,7 +1,6 @@
 package com.tss.game;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.tss.game.view.Assets;
 import com.tss.game.view.GameRenderer;
 import com.tss.game.view.GameScreen;
