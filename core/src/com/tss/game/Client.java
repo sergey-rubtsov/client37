@@ -3,16 +3,17 @@ package com.tss.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.tss.game.view.Assets;
+import com.tss.game.view.GameRenderer;
 import com.tss.game.view.GameScreen;
 
 public class Client extends Game {
 
-    private SpriteBatch batch;
+    GameRenderer batch;
 
     @Override
     public void create() {
 	Assets.load();
-	setBatch(new SpriteBatch());
+	setBatch(new GameRenderer());
 	setScreen(new GameScreen(this));
     }
 
@@ -21,11 +22,11 @@ public class Client extends Game {
 	super.render();
     }
 
-    public SpriteBatch getBatch() {
+    public GameRenderer getBatch() {
 	return batch;
     }
 
-    public void setBatch(SpriteBatch batch) {
+    public void setBatch(GameRenderer batch) {
 	this.batch = batch;
     }
 

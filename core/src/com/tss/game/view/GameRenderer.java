@@ -45,7 +45,12 @@ public class GameRenderer extends SpriteBatch implements Constants {
     }
 
     private void drawDice(Dice dice) {
-	
+	renderer.begin(ShapeType.Filled);
+	renderer.setColor(dice.getOwner().getColor());	
+
+	renderer.rect(dice.getCell().getBL().x, dice.getCell().getBL().y, xUnit * 2, yUnit * 2);
+
+	renderer.end();		
     }
 
     private void drawCells(Cell[] cells) {
@@ -90,8 +95,8 @@ public class GameRenderer extends SpriteBatch implements Constants {
     public void render(Rectangle diceButtonBounds) {
 	disableBlending();
 	begin();
-	draw(Assets.button, 320 - 64, 480 - 64, 64, 64);
-	//draw(Assets.button, diceButtonBounds.getX(), diceButtonBounds.getY(), diceButtonBounds.getWidth(), diceButtonBounds.getHeight());
+	//draw(Assets.button, 320 - 64, 480 - 64, 64, 64);
+	draw(Assets.button, diceButtonBounds.getX(), diceButtonBounds.getY(), diceButtonBounds.getWidth(), diceButtonBounds.getHeight());
 	end();
     }
 

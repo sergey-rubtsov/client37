@@ -7,6 +7,8 @@ import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft_10;
 import org.java_websocket.handshake.ServerHandshake;
 
+import com.tss.game.control.commands.Commands;
+
 public class GameSocket extends WebSocketClient {
 
     private SocketListener listener;

@@ -44,4 +44,15 @@ public class Player {
 	}
 	setDices(dices);
     }
+    
+    public Player() {
+	super();
+	this.Id = "serg";
+	this.color = new Color(0, 1f, 0, 1);
+	Dice[] dices = new Dice[12];
+	for (int i = 0; i < dices.length; i++) {
+	    dices[i] = new Dice(this);
+	}
+	setDices(dices);
+    }
 }

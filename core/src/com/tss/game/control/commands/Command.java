@@ -1,4 +1,4 @@
-package com.tss.game.control;
+package com.tss.game.control.commands;
 
 public interface Command {
     

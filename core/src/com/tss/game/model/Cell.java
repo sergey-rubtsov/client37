@@ -82,7 +82,7 @@ public class Cell implements Point, Constants {
     public boolean contains(float x, float y) {
 	return (x >= bl.x && x <= br.x && y >= bl.y && y <= tl.y) || 
 	barycentricTopTriangleContains(x, y, tr) ||
-	barycentricBotTriangleContains(x, y, br);
+	barycentricBottomTriangleContains(x, y, br);
     }
     
     private static boolean barycentricTopTriangleContains(float x, float y, Point p) {	
@@ -100,7 +100,7 @@ public class Cell implements Point, Constants {
 	return true;
     }
     
-    private static boolean barycentricBotTriangleContains(float x, float y, Point p) {	
+    private static boolean barycentricBottomTriangleContains(float x, float y, Point p) {	
 	float dx = x - p.getX();
 	float dy = y - p.getY();
 	float a = x32 * dy - y23 * dx;

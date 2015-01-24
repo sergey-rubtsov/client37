@@ -1,9 +1,5 @@
 package com.tss.game.view;
 
-import java.net.URISyntaxException;
-
-import org.java_websocket.WebSocket.READYSTATE;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.FPSLogger;
@@ -12,10 +8,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.tss.game.Client;
 import com.tss.game.Constants;
-import com.tss.game.control.Commands;
 import com.tss.game.control.GameProcessor;
-import com.tss.game.control.GameSocket;
 import com.tss.game.control.InputListener.Button;
+import com.tss.game.control.commands.Commands;
 import com.tss.game.model.Board;
 
 public class GameScreen implements Screen, Constants, Commands {
@@ -35,12 +30,12 @@ public class GameScreen implements Screen, Constants, Commands {
 	this.controller = new GameProcessor();
 	this.board.setListener(controller);
 	this.controller.setListener(board);
-	batcher = new GameRenderer();
+	batcher = client.getBatch();
 	touchPoint = new Vector3();
 	guiCam = new OrthographicCamera(WIDTH, HEIGHT);
 	guiCam.position.set(WIDTH / 2, HEIGHT / 2, 0);
-	//diceButtonBounds = new Rectangle(WIDTH / 3, BOARD_Y_END - TOP_HEIGHT / 4, WIDTH / 6, TOP_HEIGHT / 2);
-	diceButtonBounds = new Rectangle(320 - 64, 480 - 64, 64, 64);
+	diceButtonBounds = new Rectangle(WIDTH / 6, BOARD_Y_END - TOP_HEIGHT / 4, WIDTH / 12, TOP_HEIGHT / 2);
+	//diceButtonBounds = new Rectangle(320 - 64, 480 - 64, 64, 64);
 	fps = new FPSLogger();
     }
 
