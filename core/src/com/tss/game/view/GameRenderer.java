@@ -57,8 +57,35 @@ public class GameRenderer extends SpriteBatch implements Constants {
     private void drawDice(Dice dice) {
 	renderer.begin(ShapeType.Filled);
 	renderer.setColor(dice.getOwner().getColor());
-	renderer.rect(dice.getCell().getBL().x - DICE_SIZE / 2, dice.getCell().getBL().y  - DICE_SIZE / 2, DICE_SIZE, DICE_SIZE);
-	renderer.end();		
+	renderer.rect(dice.getCell().getX() - DICE_SIZE / 2, dice.getCell().getY()  - DICE_SIZE / 2, DICE_SIZE, DICE_SIZE);
+	renderer.end();
+	TextureRegion diceTexture;
+	switch (dice.getNumber()) {
+	case ONE:
+	    diceTexture = Assets.dice1;
+	    break;
+	case TWO:
+	    diceTexture = Assets.dice2;
+	    break;
+	case THREE:
+	    diceTexture = Assets.dice3;
+	    break;
+	case FOUR:
+	    diceTexture = Assets.dice4;
+	    break;
+	case FIVE:
+	    diceTexture = Assets.dice5;
+	    break;
+	case SIX:
+	    diceTexture = Assets.dice6;
+	    break;
+	default:
+	    diceTexture = Assets.question;
+	    break;
+	}
+	begin();
+	draw(diceTexture, dice.getCell().getX() - DICE_SIZE / 2, dice.getCell().getY()  - DICE_SIZE / 2, DICE_SIZE, DICE_SIZE);
+	end();
     }
 
     private void drawCells(Cell[] cells) {

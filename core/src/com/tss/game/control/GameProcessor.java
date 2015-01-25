@@ -6,6 +6,7 @@ import java.util.Queue;
 
 import org.java_websocket.WebSocket.READYSTATE;
 
+import com.badlogic.gdx.utils.Logger;
 import com.tss.game.control.commands.Command;
 import com.tss.game.control.commands.ReceiveCommand;
 import com.tss.game.control.commands.ReceiveCommand.ReceiveCommandListener;
@@ -27,8 +28,10 @@ public class GameProcessor implements SocketListener, BoardListener,
     Queue<Command> commands;
     
     GameState state;
+    
+    Logger l = new Logger("GameProcessor ", 3);
 
-    public GameProcessor() {
+    public GameProcessor() {	
 	try {
 	    socket = new GameSocket(this);
 	} catch (URISyntaxException e) {
@@ -85,7 +88,6 @@ public class GameProcessor implements SocketListener, BoardListener,
     }
     
     public void take() {
-	//state.getCurrentPlayer().
 	take(0);
     }
 
@@ -93,14 +95,16 @@ public class GameProcessor implements SocketListener, BoardListener,
     // 0 - we roll a spare die
     // not 0 - we take dice from board
     public void take(int hex) {
-	final String text = (state.getStep() + 1) + " " + hex;
+	final String text = state.getStep() + " " + hex;
+	l.debug(text);
 	commands.add(new SendCommand("take" + text, this));
     };
 
     // sent: move2 41
     // we put the die to hex41
     public void move(Cell cell) {	
-	final String text = (state.getStep() + 1) + " " + cell.getIndex();
+	final String text = state.getStep() + " " + cell.getIndex();
+	l.debug(text);
 	commands.add(new SendCommand("move" + text, this));
     };
 
@@ -122,6 +126,7 @@ public class GameProcessor implements SocketListener, BoardListener,
     @Override
     public void send(String send) {
 	//if (this.socket.getReadyState() == READYSTATE.OPEN) 
+	l.debug(send);
 	this.socket.send(send);    
     }
 
@@ -142,19 +147,25 @@ public class GameProcessor implements SocketListener, BoardListener,
     @Override
     public void from(int step, int hex, int dice) {
 	state.setStep(step);
-	if (hex == 0) {
-	    Player p = state.getCurrentPlayer();
+	Player p = state.getCurrentPlayer();
+	if (hex == 0) {	    
 	    p.setTakenDice(p.getDices().remove());
+	    p.getTakenDice().setNumber(Dice.Number.values()[dice]);
 	} else {
 	    Cell c = controllerListener.getCell(hex);
 	    Dice d = c.getDice();
-	    controllerListener.getDices().remove(d);
+	    d.setNumber(Dice.Number.values()[dice]);
+	    if (!controllerListener.getDices().remove(d)) {
+		l.debug("Can't remove dice");
+	    }
+	    p.setTakenDice(d);;
 	}
     }
 
     @Override
     public void to(int step, int hex) {
 	state.setStep(step);
+	l.debug("get current dice");
 	Dice d = state.getCurrentPlayer().getTakenDice(); //check on null
 	Cell c = controllerListener.getCell(hex);
 	c.setDice(d);
@@ -170,6 +181,7 @@ public class GameProcessor implements SocketListener, BoardListener,
 
     @Override
     public void eog(int step, int p, int w) {
+	
     }
 
     @Override
