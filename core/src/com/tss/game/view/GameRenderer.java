@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -17,17 +18,20 @@ import com.tss.game.model.Dice;
 public class GameRenderer extends SpriteBatch implements Constants {
 
     ShapeRenderer renderer;
+    
+    Sprite backgroundSprite;
 
     public GameRenderer() {
 	super();
 	this.renderer = new ShapeRenderer(512);
+	//backgroundSprite = new Sprite(Assets.background); 
     }
 
     public void renderBackground() {
 	disableBlending();
 	begin();
-	draw(Assets.backgroundRegion, 0, 0, 354, 354);
-	draw(Assets.backgroundRegion, 0, 354, 354, 354);
+	//backgroundSprite.draw(this);
+	draw(Assets.backgroundRegion, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	end();
     }
     
@@ -40,7 +44,7 @@ public class GameRenderer extends SpriteBatch implements Constants {
 
     public void renderBoard(Board board) {
 	enableBlending();
-	drawCells(board.getCells());
+	drawCells(board.getAllCells());
 	drawDices(board.getDices());
     }
 
@@ -53,7 +57,7 @@ public class GameRenderer extends SpriteBatch implements Constants {
     private void drawDice(Dice dice) {
 	renderer.begin(ShapeType.Filled);
 	renderer.setColor(dice.getOwner().getColor());
-	renderer.rect(dice.getCell().getBL().x, dice.getCell().getBL().y, xUnit * 2, yUnit * 2);
+	renderer.rect(dice.getCell().getBL().x - DICE_SIZE / 2, dice.getCell().getBL().y  - DICE_SIZE / 2, DICE_SIZE, DICE_SIZE);
 	renderer.end();		
     }
 

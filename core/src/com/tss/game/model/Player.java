@@ -1,12 +1,26 @@
 package com.tss.game.model;
 
+import java.util.LinkedList;
+
 import com.badlogic.gdx.graphics.Color;
 
 public class Player {
 
     private String Id;
+    
+    public boolean isMe;
+    
+    public Dice takenDice;
 
-    private Dice[] dices;
+    public Dice getTakenDice() {
+        return takenDice;
+    }
+
+    public void setTakenDice(Dice takenDice) {
+        this.takenDice = takenDice;
+    }
+
+    private LinkedList<Dice> dices;
 
     private Color color;
 
@@ -18,12 +32,8 @@ public class Player {
 	Id = id;
     }
 
-    public Dice[] getDices() {
+    public LinkedList<Dice> getDices() {
 	return dices;
-    }
-
-    public void setDices(Dice[] dices) {
-	this.dices = dices;
     }
 
     public Color getColor() {
@@ -33,26 +43,32 @@ public class Player {
     public void setColor(Color color) {
 	this.color = color;
     }
-
-    public Player(String id, Color color) {
-	super();
-	this.Id = id;
-	this.color = color;
-	Dice[] dices = new Dice[12];
-	for (int i = 0; i < dices.length; i++) {
-	    dices[i] = new Dice(this);
+ 
+    private void initDices() {
+	dices = new LinkedList<Dice>();
+	for (int i = 0; i < 12; i++) {
+	    dices.add(new Dice(this));
 	}
-	setDices(dices);
+    }
+
+    public Player(String id) {
+	this.isMe = false;
+	this.Id = id;
+	this.color = new Color(1f, 0, 0, 1);
+	initDices();
     }
     
-    public Player() {
-	super();
-	this.Id = "serg";
+    public Player(String id, Color color) {
+	this.isMe = false;
+	this.Id = id;
+	this.color = color;
+	initDices();
+    }
+    
+    public Player(String id, boolean isMe) {
+	this.isMe = isMe;	
+	this.Id = id;
 	this.color = new Color(0, 1f, 0, 1);
-	Dice[] dices = new Dice[12];
-	for (int i = 0; i < dices.length; i++) {
-	    dices[i] = new Dice(this);
-	}
-	setDices(dices);
+	initDices();
     }
 }

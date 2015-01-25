@@ -13,12 +13,10 @@ import com.tss.game.control.commands.Commands;
 public class Console extends WebSocketClient {
 
     public Console() throws URISyntaxException {
-	super(new URI(Commands.SERVER_URL), new Draft_10());
-	
+	super(new URI(Commands.SERVER_URL), new Draft_10());	
     }
-
     
-    //user: serg password:pass
+    //user:serg password:pass
     public static void main(String[] args) throws URISyntaxException {
 	Scanner scanner = new Scanner(System.in);
 	Console socket = new Console();
@@ -34,8 +32,7 @@ public class Console extends WebSocketClient {
     }
 
     @Override
-    public void onOpen(ServerHandshake handshakedata) {
-	
+    public void onOpen(ServerHandshake handshakedata) {	
     }
 
     @Override
@@ -45,12 +42,10 @@ public class Console extends WebSocketClient {
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
-
     }
 
     @Override
-    public void onError(Exception ex) {
-	
+    public void onError(Exception ex) {	
     }
 
 }

@@ -15,11 +15,10 @@ import com.tss.game.model.Board;
 import com.tss.game.model.Cell;
 import com.tss.game.model.Dice;
 import com.tss.game.model.GameState;
+import com.tss.game.model.Player;
 
 public class GameProcessor implements SocketListener, BoardListener,
 	InputListener, ReceiveCommandListener, SendCommandListener {
-
-    Board board;
 
     ControllerListener controllerListener;
 
@@ -40,10 +39,6 @@ public class GameProcessor implements SocketListener, BoardListener,
 	commands = new LinkedList<Command>();
     }
 
-    public ControllerListener getListener() {
-	return controllerListener;
-    }
-
     public void setListener(ControllerListener listener) {
 	this.controllerListener = listener;
     }
@@ -61,11 +56,13 @@ public class GameProcessor implements SocketListener, BoardListener,
 	}
     }
 
+    //command from board
     @Override
     public void take(Dice dice) {
-	take(dice.getCell().getIndex());
+	take(dice.getCell().getIndex());	
     }
 
+    //command from board
     @Override
     public void touch(Cell cell) {
 	if (cell.getDice() != null) {
@@ -88,6 +85,7 @@ public class GameProcessor implements SocketListener, BoardListener,
     }
     
     public void take() {
+	//state.getCurrentPlayer().
 	take(0);
     }
 
@@ -95,20 +93,22 @@ public class GameProcessor implements SocketListener, BoardListener,
     // 0 - we roll a spare die
     // not 0 - we take dice from board
     public void take(int hex) {
-	final String text = state.getStep() + " " + hex;
+	final String text = (state.getStep() + 1) + " " + hex;
 	commands.add(new SendCommand("take" + text, this));
     };
 
     // sent: move2 41
     // we put the die to hex41
-    public void move(Cell cell) {
-	final String text = state.getStep() + " " + cell.getIndex();
+    public void move(Cell cell) {	
+	final String text = (state.getStep() + 1) + " " + cell.getIndex();
 	commands.add(new SendCommand("move" + text, this));
     };
 
     // sent: quit
     // we give up
     public void quit() {
+	controllerListener.reset();
+	state.reset();
 	commands.add(new SendCommand("quit", this));
     };
 
@@ -118,6 +118,7 @@ public class GameProcessor implements SocketListener, BoardListener,
 	commands.add(new SendCommand("bot2", this));
     }
 
+    //command from command))
     @Override
     public void send(String send) {
 	//if (this.socket.getReadyState() == READYSTATE.OPEN) 
@@ -125,30 +126,46 @@ public class GameProcessor implements SocketListener, BoardListener,
     }
 
     @Override
-    public void game(String[] playersId) {
-	
+    public void game(int mySeat, String[] playersId) {
+	state.newGame(mySeat, playersId);
+    }
+
+    // sync <step::int> <current_seat::int> from <your_dice:int> log <seat>
+    // <from_hex> <die_face> <to_hex> ...
+    @Override
+    public void sync(int step, int currentSeat, int yourDice, int yourSeat, String[] args) {
+	state.setStep(step);
+	state.setCurrentSeat(currentSeat);
+	state.setMySeat(yourSeat);
     }
 
     @Override
-    public void sync(int step, int currentSeat, int yourDice, String[] args) {
+    public void from(int step, int hex, int dice) {
 	state.setStep(step);
-    }
-
-    @Override
-    public void from(int step, int cell, int dice) {
-	state.setStep(step);
+	if (hex == 0) {
+	    Player p = state.getCurrentPlayer();
+	    p.setTakenDice(p.getDices().remove());
+	} else {
+	    Cell c = controllerListener.getCell(hex);
+	    Dice d = c.getDice();
+	    controllerListener.getDices().remove(d);
+	}
     }
 
     @Override
     public void to(int step, int hex) {
 	state.setStep(step);
+	Dice d = state.getCurrentPlayer().getTakenDice(); //check on null
+	Cell c = controllerListener.getCell(hex);
+	c.setDice(d);
+	d.setCell(c);
+	controllerListener.moveTo(c, d);
     }
 
     @Override
-    public void next(int step) {
-	step++;
+    public void next(int step, int next) {
 	state.setStep(step);
-	//state
+	state.setNext(next);
     }
 
     @Override

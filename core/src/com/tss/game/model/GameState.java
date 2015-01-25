@@ -4,26 +4,39 @@ public class GameState {
     
     Player[] players;
     
-    Turn turn;
+    private Player currentPlayer;
+    
+    private Player nextPlayer;
+    
+    int currentSeat;
     
     Status status;
     
     int step;
+    
+    int mySeat;
 
-    public enum Turn {ME, NEXT, NULL}
+    public enum Next {ME, NOT_ME, NULL}
     
     public enum Status {WAIT_SERVER_ANSWER, WAIT_USER_ACTION}
     
-   // private static GameState instance = new GameState();
-    
     public GameState(){
-	this.turn = Turn.NULL;
 	this.step = 0;
     }
     
-    //public static GameState getInstance() {
-       //return instance;
-    //}
+    public void newGame(int mySeat, String[] playersId) {
+	this.mySeat = mySeat;
+	this.players = new Player[playersId.length];
+	for (int i = 0; i < playersId.length; i++) {
+	    Player p;
+	    if (i == (mySeat - 1)) {
+		p = new Player(playersId[i], true);
+	    } else p = new Player(playersId[i]);
+	    players[i] = p;
+	}
+	setCurrentPlayer(this.players[0]);
+	setNextPlayer(this.players[1]);
+    }
 
     public Player[] getPlayers() {
         return players;
@@ -41,10 +54,6 @@ public class GameState {
         this.step = step;
     }
     
-    public void nextStep() {
-	this.step++;
-    }
-    
     public Status getStatus() {
         return status;
     }
@@ -53,14 +62,44 @@ public class GameState {
         this.status = status;
     }
 
-    public Turn getTurn() {
-        return turn;
+    public void setCurrentSeat(int currentSeat) {
+	setCurrentPlayer(players[currentSeat - 1]);
+	this.currentSeat = currentSeat;
     }
 
-    public void setTurn(Turn turn) {
-        this.turn = turn;
+    public void setMySeat(int mySeat) {
+	if (this.mySeat != mySeat) {
+	    System.out.println("Sync error!");
+	}
+	this.mySeat = mySeat;
+    }
+
+    public Player getCurrentPlayer() {
+	return currentPlayer;
+    }
+
+    private void setCurrentPlayer(Player currentPlayer) {
+	this.currentPlayer = currentPlayer;
     };
     
-    
+    public Next whoNext() {
+	if (currentPlayer.isMe) return Next.ME;
+	return Next.NOT_ME;
+    }
+
+    public void setNext(int next) {
+	
+    }
+
+    public Player getNextPlayer() {
+	return nextPlayer;
+    }
+
+    private void setNextPlayer(Player nextPlayer) {
+	this.nextPlayer = nextPlayer;
+    }
+
+    public void reset() {
+    }
 
 }

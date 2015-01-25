@@ -6,23 +6,18 @@ import java.util.Map;
 
 public class Builder {
 
-    Cell[][] mesh;
+    private final Cell[][] mesh;
 
-    Cell[] cells;
+    private final Cell[] cells;
+    
+    private final HashMap<Integer, Cell> index;
+
+    public HashMap<Integer, Cell> getIndex() {
+        return index;
+    }
 
     public Builder(int yShift, float xUnit, float yUnit) {
-	buildMesh(yShift, xUnit, yUnit);
-    }
-
-    public Cell[][] getMesh() {
-	return this.mesh;
-    }
-
-    public Cell[] getCells() {
-	return this.cells;
-    }
-
-    public void buildMesh(int yShift, float xUnit, float yUnit) {
+	index = new HashMap<Integer, Cell>();
 	ArrayList<Cell> result = new ArrayList<Cell>();
 	this.mesh = new Cell[16][24];
 	buildCenters(mesh);
@@ -75,50 +70,67 @@ public class Builder {
 	this.cells = result.toArray(new Cell[result.size()]);
     }
 
-    private static void buildCenters(Cell[][] m) {
-	m[5][21] = new Cell(1);
-	m[7][21] = new Cell(2);
-	m[9][21] = new Cell(3);
-	m[11][21] = new Cell(4);
+    public Cell[][] getMesh() {
+	return this.mesh;
+    }
 
-	m[4][18] = new Cell(8);
-	m[6][18] = new Cell(9, 1);
-	m[8][18] = new Cell(10, 1);
-	m[10][18] = new Cell(11, 1);
-	m[12][18] = new Cell(12);
+    public Cell[] getCells() {
+	return this.cells;
+    }
 
-	m[3][15] = new Cell(15);
-	m[5][15] = new Cell(16, 1);
-	m[7][15] = new Cell(17, 1);
-	m[9][15] = new Cell(18, 1);
-	m[11][15] = new Cell(19, 1);
-	m[13][15] = new Cell(20);
+    public void buildMesh(int yShift, float xUnit, float yUnit) {
 
-	m[2][12] = new Cell(22);
-	m[4][12] = new Cell(23, 1);
-	m[6][12] = new Cell(24, 1);
-	m[8][12] = new Cell(25, 1);
-	m[10][12] = new Cell(26, 1);
-	m[12][12] = new Cell(27, 1);
-	m[14][12] = new Cell(28);
+    }
+    
+    private Cell addToIndex(Cell cell) {
+	index.put(cell.getIndex(), cell);
+	return cell;
+    }
 
-	m[3][9] = new Cell(30);
-	m[5][9] = new Cell(31, 1);
-	m[7][9] = new Cell(32, 1);
-	m[9][9] = new Cell(33, 1);
-	m[11][9] = new Cell(34, 1);
-	m[13][9] = new Cell(35);
+    private void buildCenters(Cell[][] m) {
+	m[5][21] = addToIndex(new Cell(1));
+	m[7][21] = addToIndex(new Cell(2));
+	m[9][21] = addToIndex(new Cell(3));
+	m[11][21] = addToIndex(new Cell(4));
 
-	m[4][6] = new Cell(38);
-	m[6][6] = new Cell(39, 1);
-	m[8][6] = new Cell(40, 1);
-	m[10][6] = new Cell(41, 1);
-	m[12][6] = new Cell(42);
+	m[4][18] = addToIndex(new Cell(8));
+	m[6][18] = addToIndex(new Cell(9, 1));
+	m[8][18] = addToIndex(new Cell(10, 1));
+	m[10][18] = addToIndex(new Cell(11, 1));
+	m[12][18] = addToIndex(new Cell(12));
 
-	m[5][3] = new Cell(46);
-	m[7][3] = new Cell(47);
-	m[9][3] = new Cell(48);
-	m[11][3] = new Cell(49);
+	m[3][15] = addToIndex(new Cell(15));
+	m[5][15] = addToIndex(new Cell(16, 1));
+	m[7][15] = addToIndex(new Cell(17, 1));
+	m[9][15] = addToIndex(new Cell(18, 1));
+	m[11][15] = addToIndex(new Cell(19, 1));
+	m[13][15] = addToIndex(new Cell(20));
+
+	m[2][12] = addToIndex(new Cell(22));
+	m[4][12] = addToIndex(new Cell(23, 1));
+	m[6][12] = addToIndex(new Cell(24, 1));
+	m[8][12] = addToIndex(new Cell(25, 1));
+	m[10][12] = addToIndex(new Cell(26, 1));
+	m[12][12] = addToIndex(new Cell(27, 1));
+	m[14][12] = addToIndex(new Cell(28));
+
+	m[3][9] = addToIndex(new Cell(30));
+	m[5][9] = addToIndex(new Cell(31, 1));
+	m[7][9] = addToIndex(new Cell(32, 1));
+	m[9][9] = addToIndex(new Cell(33, 1));
+	m[11][9] = addToIndex(new Cell(34, 1));
+	m[13][9] = addToIndex(new Cell(35));
+
+	m[4][6] = addToIndex(new Cell(38));
+	m[6][6] = addToIndex(new Cell(39, 1));
+	m[8][6] = addToIndex(new Cell(40, 1));
+	m[10][6] = addToIndex(new Cell(41, 1));
+	m[12][6] = addToIndex(new Cell(42));
+
+	m[5][3] = addToIndex(new Cell(46));
+	m[7][3] = addToIndex(new Cell(47));
+	m[9][3] = addToIndex(new Cell(48));
+	m[11][3] = addToIndex(new Cell(49));
     }
 
     private static void buildNeigbors(Cell[][] m) {

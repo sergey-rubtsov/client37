@@ -2,6 +2,8 @@ package com.tss.game.model;
 
 import java.util.Random;
 
+import com.badlogic.gdx.graphics.Color;
+
 public class Dice {
 
     public enum Number {
@@ -11,6 +13,8 @@ public class Dice {
     public enum Status {
 	LOCKED, UNLOCKED
     };
+    
+    private Color color;
 
     private Status status;
 
@@ -41,8 +45,8 @@ public class Dice {
     }
 
     public Dice(Player owner) {
-	super();
 	this.owner = owner;
+	this.color = owner.getColor();
 	this.number = Number.NULL;
 	this.status = Status.UNLOCKED;
     }
@@ -70,8 +74,11 @@ public class Dice {
 	this.cell = cell;
     }
 
+    public Color getColor() {
+	return color;
+    }
+    
     public void reset() {
-	// TODO Auto-generated method stub
 	
     }
 }

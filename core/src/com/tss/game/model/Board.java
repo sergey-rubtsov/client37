@@ -1,6 +1,7 @@
 package com.tss.game.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import com.tss.game.Constants;
@@ -19,7 +20,7 @@ public class Board implements Constants, ControllerListener {
      *     38  39  40  41  42
      *       46  47  48  49
      */
-    private Cell[] cells;
+    private final Cell[] cells;
 
     private LinkedList<Dice> dices;
     
@@ -28,6 +29,8 @@ public class Board implements Constants, ControllerListener {
     private int verticalPosition;
     
     private BoardListener listener;
+
+    private HashMap<Integer, Cell> index;
 
     public BoardListener getListener() {
         return listener;
@@ -43,18 +46,15 @@ public class Board implements Constants, ControllerListener {
 	this.dices = new LinkedList<Dice>();
 	Builder b = new Builder(horizontalPosition, xUnit, yUnit);
 	this.cells = b.getCells();
+	this.index = b.getIndex();
     }
 
     public Board() {
 	this(xUnit, yUnit, 0, BOARD_Y_BEGIN);
     }
 
-    public Cell[] getCells() {
+    public Cell[] getAllCells() {
 	return cells;
-    }
-
-    public void setCells(Cell[] cells) {
-	this.cells = cells;
     }
 
     public LinkedList<Dice> getDices() {
@@ -120,32 +120,40 @@ public class Board implements Constants, ControllerListener {
     }
 
     @Override
-    public void roll(Dice dice) {
-	// TODO Auto-generated method stub
-	
-    }
+    public void moveTo(Cell cell, Dice dice) {
+	cell.setDice(dice);
+	dice.setCell(cell);
+	dices.add(dice);
+    }    
 
     @Override
-    public void removeDice(Dice dice) {
-	// TODO Auto-generated method stub
-	
-    }
-
-    @Override
-    public void lockDice(Dice dice) {
-	// TODO Auto-generated method stub
-	
+    public void removeFrom(Cell cell) {
+	int index = cell.getIndex();
+	for (Dice dice : dices) {
+	    if (dice.getCell().getIndex() == index) {
+		dices.remove(dice);
+		dice.setCell(null);
+		cell.setDice(null);
+		return;
+	    }
+	}
     }
 
     @Override
     public void unlockDice(Dice dice) {
-	// TODO Auto-generated method stub
-	
     }
 
     @Override
-    public void resetGame() {
-	// TODO Auto-generated method stub
-	
+    public void reset() {	
     }
+
+    @Override
+    public void lockDice(Dice dice) {
+    }
+
+    @Override
+    public Cell getCell(int cellIndex) {
+	return index.get(cellIndex);
+    }
+
 }

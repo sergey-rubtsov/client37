@@ -35,10 +35,10 @@ public class GameScreen implements Screen, Constants, Commands {
 	touchPoint = new Vector3();
 	guiCam = new OrthographicCamera(WIDTH, HEIGHT);
 	guiCam.position.set(WIDTH / 2, HEIGHT / 2, 0);
-	newGameButtonBounds = new Rectangle(WIDTH / 6, BOARD_Y_END - TOP_HEIGHT / 4, WIDTH / 12, WIDTH / 12);
-	giveUpButtonBounds = new Rectangle(WIDTH / 2, BOARD_Y_END - TOP_HEIGHT / 4, WIDTH / 12, WIDTH / 12);
-	rollButtonBounds = new Rectangle(WIDTH * 5 / 6, BOARD_Y_END - TOP_HEIGHT / 4, WIDTH / 12, WIDTH / 12);
-	fps = new FPSLogger();
+	giveUpButtonBounds = new Rectangle(WIDTH / 6 - WIDTH / 24, BOARD_Y_END - TOP_HEIGHT / 4, WIDTH / 12, WIDTH / 12);
+	newGameButtonBounds = new Rectangle(WIDTH / 2 - WIDTH / 24, BOARD_Y_END - TOP_HEIGHT / 4, WIDTH / 12, WIDTH / 12);
+	rollButtonBounds = new Rectangle(WIDTH * 5 / 6 - WIDTH / 24, BOARD_Y_END - TOP_HEIGHT / 4, WIDTH / 12, WIDTH / 12);
+	//fps = new FPSLogger();
     }
 
     @Override
@@ -77,9 +77,9 @@ public class GameScreen implements Screen, Constants, Commands {
 
     private void draw() {
 	batcher.render(board);
-	batcher.render(Assets.buttonRoll, rollButtonBounds);
-	batcher.render(Assets.buttonGiveUp, newGameButtonBounds);
-	batcher.render(Assets.buttonStart, giveUpButtonBounds);
+	batcher.render(Assets.question, rollButtonBounds);
+	batcher.render(Assets.play, newGameButtonBounds);
+	batcher.render(Assets.flag, giveUpButtonBounds);
 	
 	guiCam.update();
 	batcher.setProjectionMatrix(guiCam.combined);

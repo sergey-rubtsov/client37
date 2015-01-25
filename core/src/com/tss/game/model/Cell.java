@@ -3,7 +3,7 @@ package com.tss.game.model;
 import com.tss.game.Constants;
 
 public class Cell implements Point, Constants { 
-    
+
     public final static float y23 = yUnit;
     public final static float x32 = xUnit;
     public final static float y31 = 0;
@@ -70,7 +70,6 @@ public class Cell implements Point, Constants {
 
     public void setDice(Dice dice) {
 	this.dice = dice;
-	this.dice.setCell(this);
     }
     
     public void reset() {
