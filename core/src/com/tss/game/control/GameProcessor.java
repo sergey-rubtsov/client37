@@ -50,7 +50,12 @@ public class GameProcessor implements SocketListener, BoardListener,
     public void update() {
 	if (!commands.isEmpty()) {
 	    Command c = commands.peek();
-	    c.execute();
+	    try {
+		c.execute();
+	    } catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
 	    commands.remove();
 	}
     }

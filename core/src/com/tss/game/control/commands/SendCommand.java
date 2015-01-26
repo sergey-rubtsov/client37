@@ -1,5 +1,7 @@
 package com.tss.game.control.commands;
 
+import org.java_websocket.exceptions.WebsocketNotConnectedException;
+
 import com.tss.game.control.GameSocket;
 import com.tss.game.control.commands.send.Send;
 
@@ -20,7 +22,7 @@ public class SendCommand implements Command {
     }
     
     @Override
-    public void execute() {
+    public void execute() throws WebsocketNotConnectedException {
 	System.out.println("s:" + message);
 	socket.send(message);
     }

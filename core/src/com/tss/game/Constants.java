@@ -25,7 +25,7 @@ public interface Constants {
 
     public static final int DICE_COUNT = 12;
 
-    public static final float DICE_SIZE = xUnit * 0.8f;
+    public static final float DICE_SIZE = xUnit * 0.9f;
 
     public final Color CMCOLOR = new Color(1f, 0.9f, 0f, 1);
     public final Color CCCOLOR = new Color(1f, 0.2f, 0f, 1);
