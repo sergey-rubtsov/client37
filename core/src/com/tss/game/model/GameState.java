@@ -1,5 +1,7 @@
 package com.tss.game.model;
 
+import com.badlogic.gdx.graphics.Color;
+
 public class GameState {
     
     Player[] players;
@@ -8,9 +10,9 @@ public class GameState {
     
     private Player nextPlayer;
     
-    int currentSeat;
+    private Color myColor;
     
-    Status status;
+    private int takenDice;
     
     int step;
     
@@ -20,18 +22,23 @@ public class GameState {
     
     public enum Status {WAIT_SERVER_ANSWER, WAIT_USER_ACTION}
     
-    public GameState(){
+    public GameState() {
+	this.takenDice = 0;
 	this.step = 0;
+	this.myColor = new Color(1, 1, 1, 1);
     }
     
     public void newGame(int mySeat, String[] playersId) {
 	this.mySeat = mySeat;
+	this.takenDice = 0;
+	this.step = 0;
 	this.players = new Player[playersId.length];
 	for (int i = 0; i < playersId.length; i++) {
 	    Player p;
 	    if (i == (mySeat - 1)) {
-		p = new Player(playersId[i], true);
-	    } else p = new Player(playersId[i]);
+		p = new Player(playersId[i], true, i+1);
+		myColor = p.getColor();
+	    } else p = new Player(playersId[i], i+1);
 	    players[i] = p;
 	}
 	setCurrentPlayer(this.players[0]);
@@ -53,24 +60,8 @@ public class GameState {
     public void setStep(int step) {
         this.step = step;
     }
-    
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public void setCurrentSeat(int currentSeat) {
-	setCurrentPlayer(players[currentSeat - 1]);
-	this.currentSeat = currentSeat;
-    }
 
     public void setMySeat(int mySeat) {
-	if (this.mySeat != mySeat) {
-	    System.out.println("Sync error!");
-	}
 	this.mySeat = mySeat;
     }
 
@@ -88,7 +79,12 @@ public class GameState {
     }
 
     public void setNext(int next) {
-	
+	setCurrentPlayer(this.players[next - 1]);
+	if (next > this.players.length) {
+	    setNextPlayer(this.players[0]);
+	    return;
+	}
+	setNextPlayer(this.players[next - 1]);
     }
 
     public Player getNextPlayer() {
@@ -100,6 +96,22 @@ public class GameState {
     }
 
     public void reset() {
+    }
+
+    public int getTakenDice() {
+	return takenDice;
+    }
+
+    public void setTakenDice(int takenDice) {
+	this.takenDice = takenDice;
+    }
+
+    public Color getMyColor() {
+	return myColor;
+    }
+
+    public void setMyColor(Color myColor) {
+	this.myColor = myColor;
     }
 
 }

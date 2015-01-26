@@ -6,32 +6,28 @@ import java.util.Queue;
 
 import org.java_websocket.WebSocket.READYSTATE;
 
-import com.badlogic.gdx.utils.Logger;
 import com.tss.game.control.commands.Command;
 import com.tss.game.control.commands.ReceiveCommand;
-import com.tss.game.control.commands.ReceiveCommand.ReceiveCommandListener;
+import com.tss.game.control.commands.send.Message;
+import com.tss.game.control.commands.send.Move;
+import com.tss.game.control.commands.send.Take;
 import com.tss.game.control.commands.SendCommand;
-import com.tss.game.control.commands.SendCommand.SendCommandListener;
-import com.tss.game.model.Board;
 import com.tss.game.model.Cell;
 import com.tss.game.model.Dice;
 import com.tss.game.model.GameState;
-import com.tss.game.model.Player;
 
 public class GameProcessor implements SocketListener, BoardListener,
-	InputListener, ReceiveCommandListener, SendCommandListener {
+	InputListener {
 
     ControllerListener controllerListener;
 
     GameSocket socket;
 
     Queue<Command> commands;
-    
-    GameState state;
-    
-    Logger l = new Logger("GameProcessor ", 3);
 
-    public GameProcessor() {	
+    private GameState state;
+
+    public GameProcessor() {
 	try {
 	    socket = new GameSocket(this);
 	} catch (URISyntaxException e) {
@@ -48,7 +44,7 @@ public class GameProcessor implements SocketListener, BoardListener,
 
     @Override
     public void receive(String message) {
-	commands.add(new ReceiveCommand(message, this));
+	commands.add(new ReceiveCommand(message, state, controllerListener));
     }
 
     public void update() {
@@ -59,17 +55,17 @@ public class GameProcessor implements SocketListener, BoardListener,
 	}
     }
 
-    //command from board
+    // command from board
     @Override
     public void take(Dice dice) {
-	take(dice.getCell().getIndex());	
+	take(dice.getCell().getIndex());
     }
 
-    //command from board
+    // command from board
     @Override
     public void touch(Cell cell) {
 	if (cell.getDice() != null) {
-	    take(cell.getDice());
+	    take(cell.getIndex());
 	    return;
 	}
 	move(cell);
@@ -86,7 +82,7 @@ public class GameProcessor implements SocketListener, BoardListener,
     @Override
     public void closed() {
     }
-    
+
     public void take() {
 	take(0);
     }
@@ -94,18 +90,14 @@ public class GameProcessor implements SocketListener, BoardListener,
     // sent: take2 0
     // 0 - we roll a spare die
     // not 0 - we take dice from board
-    public void take(int hex) {
-	final String text = state.getStep() + " " + hex;
-	l.debug(text);
-	commands.add(new SendCommand("take" + text, this));
+    public void take(int hex) {	
+	commands.add(new SendCommand(new Take(state, hex), socket));
     };
 
     // sent: move2 41
     // we put the die to hex41
     public void move(Cell cell) {	
-	final String text = state.getStep() + " " + cell.getIndex();
-	l.debug(text);
-	commands.add(new SendCommand("move" + text, this));
+	commands.add(new SendCommand(new Move(state, cell), socket));
     };
 
     // sent: quit
@@ -113,78 +105,30 @@ public class GameProcessor implements SocketListener, BoardListener,
     public void quit() {
 	controllerListener.reset();
 	state.reset();
-	commands.add(new SendCommand("quit", this));
+	commands.add(new SendCommand(new Message() {
+	    @Override
+	    public String getCommandText() {
+		return "quit";
+	    }
+	}, socket));
     };
 
     // sent: bot2
     // we start a game with the bot
     public void bot() {
-	commands.add(new SendCommand("bot2", this));
-    }
-
-    //command from command))
-    @Override
-    public void send(String send) {
-	//if (this.socket.getReadyState() == READYSTATE.OPEN) 
-	l.debug(send);
-	this.socket.send(send);    
-    }
-
-    @Override
-    public void game(int mySeat, String[] playersId) {
-	state.newGame(mySeat, playersId);
-    }
-
-    // sync <step::int> <current_seat::int> from <your_dice:int> log <seat>
-    // <from_hex> <die_face> <to_hex> ...
-    @Override
-    public void sync(int step, int currentSeat, int yourDice, int yourSeat, String[] args) {
-	state.setStep(step);
-	state.setCurrentSeat(currentSeat);
-	state.setMySeat(yourSeat);
-    }
-
-    @Override
-    public void from(int step, int hex, int dice) {
-	state.setStep(step);
-	Player p = state.getCurrentPlayer();
-	if (hex == 0) {	    
-	    p.setTakenDice(p.getDices().remove());
-	    p.getTakenDice().setNumber(Dice.Number.values()[dice]);
-	} else {
-	    Cell c = controllerListener.getCell(hex);
-	    Dice d = c.getDice();
-	    d.setNumber(Dice.Number.values()[dice]);
-	    if (!controllerListener.getDices().remove(d)) {
-		l.debug("Can't remove dice");
+	commands.add(new SendCommand(new Message() {
+	    @Override
+	    public String getCommandText() {
+		return "bot2";
 	    }
-	    p.setTakenDice(d);;
-	}
+	}, socket));
+    }
+    
+
+    public GameState getState() {
+        return state;
     }
 
-    @Override
-    public void to(int step, int hex) {
-	state.setStep(step);
-	l.debug("get current dice");
-	Dice d = state.getCurrentPlayer().getTakenDice(); //check on null
-	Cell c = controllerListener.getCell(hex);
-	c.setDice(d);
-	d.setCell(c);
-	controllerListener.moveTo(c, d);
-    }
+    // if (this.socket.getReadyState() == READYSTATE.OPEN)
 
-    @Override
-    public void next(int step, int next) {
-	state.setStep(step);
-	state.setNext(next);
-    }
-
-    @Override
-    public void eog(int step, int p, int w) {
-	
-    }
-
-    @Override
-    public void lobby() {
-    };
 }

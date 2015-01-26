@@ -3,6 +3,7 @@ package com.tss.game.view;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -20,6 +21,8 @@ public class GameRenderer extends SpriteBatch implements Constants {
     ShapeRenderer renderer;
     
     Sprite backgroundSprite;
+    
+    TextureRegion question;
 
     public GameRenderer() {
 	super();
@@ -59,8 +62,14 @@ public class GameRenderer extends SpriteBatch implements Constants {
 	renderer.setColor(dice.getOwner().getColor());
 	renderer.rect(dice.getCell().getX() - DICE_SIZE / 2, dice.getCell().getY()  - DICE_SIZE / 2, DICE_SIZE, DICE_SIZE);
 	renderer.end();
+	begin();
+	draw(getDiceTextureRegion(dice.getNumber()), dice.getCell().getX() - DICE_SIZE / 2, dice.getCell().getY()  - DICE_SIZE / 2, DICE_SIZE, DICE_SIZE);
+	end();
+    }
+    
+    private TextureRegion getDiceTextureRegion(Dice.Number dice) {
 	TextureRegion diceTexture;
-	switch (dice.getNumber()) {
+	switch (dice) {
 	case ONE:
 	    diceTexture = Assets.dice1;
 	    break;
@@ -83,9 +92,7 @@ public class GameRenderer extends SpriteBatch implements Constants {
 	    diceTexture = Assets.question;
 	    break;
 	}
-	begin();
-	draw(diceTexture, dice.getCell().getX() - DICE_SIZE / 2, dice.getCell().getY()  - DICE_SIZE / 2, DICE_SIZE, DICE_SIZE);
-	end();
+	return diceTexture;
     }
 
     private void drawCells(Cell[] cells) {
@@ -127,10 +134,19 @@ public class GameRenderer extends SpriteBatch implements Constants {
 	renderer.dispose();
     }
 
-    public void render(TextureRegion button, Rectangle diceButtonBounds) {	
+    public void render(TextureRegion button, Rectangle buttonBounds) {	
 	begin();	
-	draw(button, diceButtonBounds.getX(), diceButtonBounds.getY(), diceButtonBounds.getWidth(), diceButtonBounds.getHeight());
+	draw(button, buttonBounds.getX(), buttonBounds.getY(), buttonBounds.getWidth(), buttonBounds.getHeight());
 	end();
     }
 
+    public void renderTake(int takenDice, Color color, Rectangle r) {
+	renderer.begin(ShapeType.Filled);
+	renderer.setColor(color);
+	renderer.rect(r.getX(), r.getY(), r.getWidth(), r.getHeight());
+	renderer.end();	
+	begin();	
+	draw(getDiceTextureRegion(Dice.Number.values()[takenDice]), r.getX(), r.getY(), r.getWidth(), r.getHeight());
+	end();
+    }
 }

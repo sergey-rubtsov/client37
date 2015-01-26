@@ -20,7 +20,7 @@ public class GameScreen implements Screen, Constants, Commands {
     GameRenderer batcher;
     GameProcessor controller;
     Board board;
-    Rectangle newGameButtonBounds;
+    public final Rectangle newGameButtonBounds;
     Rectangle rollButtonBounds;
     Rectangle giveUpButtonBounds;
     Vector3 touchPoint;
@@ -68,19 +68,16 @@ public class GameScreen implements Screen, Constants, Commands {
 	    controller.bot();
 	} else if (giveUpButtonBounds.contains(touchPoint.x, touchPoint.y)) {
 	    controller.quit();
-	}
-	    else {
+	} else {
 	    board.touch(touchPoint.x, touchPoint.y);
-	}
-	
+	}	
     }
 
     private void draw() {
 	batcher.render(board);
-	batcher.render(Assets.question, rollButtonBounds);
+	batcher.renderTake(controller.getState().getTakenDice(), controller.getState().getMyColor(), rollButtonBounds);
 	batcher.render(Assets.play, newGameButtonBounds);
-	batcher.render(Assets.flag, giveUpButtonBounds);
-	
+	batcher.render(Assets.flag, giveUpButtonBounds);	
 	guiCam.update();
 	batcher.setProjectionMatrix(guiCam.combined);
     }

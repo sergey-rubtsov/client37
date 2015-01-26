@@ -1,24 +1,28 @@
 package com.tss.game.control.commands;
 
-public class SendCommand implements Command {
+import com.tss.game.control.GameSocket;
+import com.tss.game.control.commands.send.Send;
 
-    public interface SendCommandListener {
-	public void send(String string);
-    }
+public class SendCommand implements Command {
 
     String message;
     
-    SendCommandListener listener;
+    GameSocket socket;
 
-    public SendCommand(String message, SendCommandListener listener) {
-	this.message = message;
-	this.listener = listener;
+    public SendCommand(Send message, GameSocket socket) {
+	this.message = message.getCommandText();
+	this.socket = socket;
     }
 
+    public SendCommand(String message, GameSocket socket) {
+	this.message = message;
+	this.socket = socket;
+    }
+    
     @Override
     public void execute() {
-	System.out.println(message);
-	listener.send(message);
+	System.out.println("s:" + message);
+	socket.send(message);
     }
 
 }
