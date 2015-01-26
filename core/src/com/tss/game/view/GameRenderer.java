@@ -19,29 +19,34 @@ import com.tss.game.model.Dice;
 public class GameRenderer extends SpriteBatch implements Constants {
 
     ShapeRenderer renderer;
-    
+
     Sprite backgroundSprite;
-    
+
     TextureRegion question;
+    
+    public class Impulse {
+	
+    }
 
     public GameRenderer() {
 	super();
 	this.renderer = new ShapeRenderer(512);
-	//backgroundSprite = new Sprite(Assets.background); 
+	// backgroundSprite = new Sprite(Assets.background);
     }
 
     public void renderBackground() {
 	disableBlending();
 	begin();
-	//backgroundSprite.draw(this);
-	draw(Assets.backgroundRegion, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+	// backgroundSprite.draw(this);
+	draw(Assets.backgroundRegion, 0, 0, Gdx.graphics.getWidth(),
+		Gdx.graphics.getHeight());
 	end();
     }
-    
+
     public void render(Board board) {
 	GL20 gl = Gdx.gl;
 	gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-	renderBackground();	
+	renderBackground();
 	renderBoard(board);
     }
 
@@ -51,8 +56,23 @@ public class GameRenderer extends SpriteBatch implements Constants {
 	drawDices(board.getDices());
     }
 
+    private void drawLocked(Dice dice) {
+	Cell cell = dice.getCell();
+	Cell[] neigbors = cell.getNeighbors();
+	int nDices = 0;
+	for (Cell n : neigbors) {
+	    if (n.getDice() != null)
+		nDices++;
+	}
+	if (nDices == dice.getNumber().ordinal()) {
+	    Color cellCol = new Color(dice.getColor().r, dice.getColor().g, dice.getColor().b, 0.8f);
+	    drawCellMain(cell, cellCol);
+	}
+    }
+
     private void drawDices(LinkedList<Dice> dices) {
 	for (Dice dice : dices) {
+	    drawLocked(dice);
 	    drawDice(dice);
 	}
     }
@@ -60,13 +80,16 @@ public class GameRenderer extends SpriteBatch implements Constants {
     private void drawDice(Dice dice) {
 	renderer.begin(ShapeType.Filled);
 	renderer.setColor(dice.getOwner().getColor());
-	renderer.rect(dice.getCell().getX() - DICE_SIZE / 2, dice.getCell().getY()  - DICE_SIZE / 2, DICE_SIZE, DICE_SIZE);
+	renderer.rect(dice.getCell().getX() - DICE_SIZE / 2, dice.getCell()
+		.getY() - DICE_SIZE / 2, DICE_SIZE, DICE_SIZE);
 	renderer.end();
 	begin();
-	draw(getDiceTextureRegion(dice.getNumber()), dice.getCell().getX() - DICE_SIZE / 2, dice.getCell().getY()  - DICE_SIZE / 2, DICE_SIZE, DICE_SIZE);
+	draw(getDiceTextureRegion(dice.getNumber()), dice.getCell().getX()
+		- DICE_SIZE / 2, dice.getCell().getY() - DICE_SIZE / 2,
+		DICE_SIZE, DICE_SIZE);
 	end();
     }
-    
+
     private TextureRegion getDiceTextureRegion(Dice.Number dice) {
 	TextureRegion diceTexture;
 	switch (dice) {
@@ -96,7 +119,8 @@ public class GameRenderer extends SpriteBatch implements Constants {
     }
 
     private void drawCells(Cell[] cells) {
-	for (Cell cell : cells) drawCell(cell);
+	for (Cell cell : cells)
+	    drawCell(cell);
     }
 
     private void drawCell(Cell c) {
@@ -105,25 +129,26 @@ public class GameRenderer extends SpriteBatch implements Constants {
     }
 
     private void drawCellMain(Cell c) {
-	renderer.begin(ShapeType.Filled);
-	renderer.setColor(CELL_COLOR[c.getColor()]);	
-	renderer.triangle(c.getB().x, c.getB().y, 
-		c.getBL().x, c.getBL().y, c.getBR().x, c.getBR().y);
-	renderer.rect(c.getBL().x, c.getBL().y, xUnit * 2, yUnit * 2);
-	renderer.triangle(c.getT().x, c.getT().y, 
-		c.getTL().x, c.getTL().y, c.getTR().x, c.getTR().y);
-	renderer.end();	
+	drawCellMain(c, CELL_COLOR[c.getColor()]);
     }
     
-    private void drawCellBorder(Cell c) {	
-	float[] vertices = {c.getT().x, c.getT().y, 
-		c.getTL().x, c.getTL().y, 
-		c.getBL().x, c.getBL().y, 
-		c.getB().x, c.getB().y, 
-		c.getBR().x, c.getBR().y, 
-		c.getTR().x, c.getTR().y};
+    private void drawCellMain(Cell c, Color color) {
+	renderer.begin(ShapeType.Filled);
+	renderer.setColor(color);
+	renderer.triangle(c.getB().x, c.getB().y, c.getBL().x, c.getBL().y,
+		c.getBR().x, c.getBR().y);
+	renderer.rect(c.getBL().x, c.getBL().y, xUnit * 2, yUnit * 2);
+	renderer.triangle(c.getT().x, c.getT().y, c.getTL().x, c.getTL().y,
+		c.getTR().x, c.getTR().y);
+	renderer.end();
+    }
+
+    private void drawCellBorder(Cell c) {
+	float[] vertices = { c.getT().x, c.getT().y, c.getTL().x, c.getTL().y,
+		c.getBL().x, c.getBL().y, c.getB().x, c.getB().y, c.getBR().x,
+		c.getBR().y, c.getTR().x, c.getTR().y };
 	renderer.begin(ShapeType.Line);
-	renderer.setColor(CBCOLOR);	
+	renderer.setColor(CBCOLOR);
 	renderer.polygon(vertices);
 	renderer.end();
     }
@@ -134,9 +159,10 @@ public class GameRenderer extends SpriteBatch implements Constants {
 	renderer.dispose();
     }
 
-    public void render(TextureRegion button, Rectangle buttonBounds) {	
-	begin();	
-	draw(button, buttonBounds.getX(), buttonBounds.getY(), buttonBounds.getWidth(), buttonBounds.getHeight());
+    public void render(TextureRegion button, Rectangle buttonBounds) {
+	begin();
+	draw(button, buttonBounds.getX(), buttonBounds.getY(),
+		buttonBounds.getWidth(), buttonBounds.getHeight());
 	end();
     }
 
@@ -144,9 +170,10 @@ public class GameRenderer extends SpriteBatch implements Constants {
 	renderer.begin(ShapeType.Filled);
 	renderer.setColor(color);
 	renderer.rect(r.getX(), r.getY(), r.getWidth(), r.getHeight());
-	renderer.end();	
-	begin();	
-	draw(getDiceTextureRegion(Dice.Number.values()[takenDice]), r.getX(), r.getY(), r.getWidth(), r.getHeight());
+	renderer.end();
+	begin();
+	draw(getDiceTextureRegion(Dice.Number.values()[takenDice]), r.getX(),
+		r.getY(), r.getWidth(), r.getHeight());
 	end();
     }
 }
