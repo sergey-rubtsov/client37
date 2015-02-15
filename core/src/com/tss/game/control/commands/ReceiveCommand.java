@@ -70,9 +70,8 @@ public class ReceiveCommand implements Command {
 	    Cell c = controllerListener.getCell(hex);
 	    Dice d = c.getDice();
 	    d.setNumber(Dice.Number.values()[dice]);
-	    if (!controllerListener.getDices().remove(d)) {
-
-	    }
+	    controllerListener.getDices().remove(d);
+	    controllerListener.removeFrom(c);
 	    p.setTakenDice(d);	    
 	}
     }

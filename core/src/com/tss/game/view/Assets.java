@@ -36,17 +36,17 @@ public class Assets {
     }
 
     public static void load() {
-	background = loadTexture("background.png");
-	items = loadTexture("items.png");
-	playt = loadTexture("play.png");
-	flagt = loadTexture("flag.png");
-	dice1t = loadTexture("dice1.png");
-	dice2t = loadTexture("dice2.png");
-	dice3t = loadTexture("dice3.png");
-	dice4t = loadTexture("dice4.png");
-	dice5t = loadTexture("dice5.png");
-	dice6t = loadTexture("dice6.png");
-	questiont = loadTexture("question.png");
+	background = loadTexture("img/background.png");
+	items = loadTexture("img/items.png");
+	playt = loadTexture("img/play.png");
+	flagt = loadTexture("img/flag.png");
+	dice1t = loadTexture("img/dice1.png");
+	dice2t = loadTexture("img/dice2.png");
+	dice3t = loadTexture("img/dice3.png");
+	dice4t = loadTexture("img/dice4.png");
+	dice5t = loadTexture("img/dice5.png");
+	dice6t = loadTexture("img/dice6.png");
+	questiont = loadTexture("img/question.png");
 	play = new TextureRegion(playt, 0, 0, 166, 166);
 	flag = new TextureRegion(flagt, 0, 0, 58, 85);
 	dice1 = new TextureRegion(dice1t, 0, 0, 104, 104);
