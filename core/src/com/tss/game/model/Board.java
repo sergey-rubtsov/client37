@@ -50,7 +50,7 @@ public class Board implements ControllerListener {
     }
 
     public Board() {
-        this(GameScreen.xUnit, GameScreen.yUnit, 0, GameScreen.BOARD_Y_BEGIN);
+        this(GameScreen.xUnit, GameScreen.yUnit, 0, GameScreen.boardYBegin);
     }
 
     public Cell[] getAllCells() {

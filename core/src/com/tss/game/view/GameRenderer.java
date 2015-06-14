@@ -79,13 +79,13 @@ public class GameRenderer extends SpriteBatch {
     private void drawDice(Dice dice) {
         renderer.begin(ShapeType.Filled);
         renderer.setColor(dice.getOwner().getColor());
-        renderer.rect(dice.getCell().getX() - GameScreen.DICE_SIZE / 2, dice.getCell()
-                .getY() - GameScreen.DICE_SIZE / 2, GameScreen.DICE_SIZE, GameScreen.DICE_SIZE);
+        renderer.rect(dice.getCell().getX() - GameScreen.diceSize / 2, dice.getCell()
+                .getY() - GameScreen.diceSize / 2, GameScreen.diceSize, GameScreen.diceSize);
         renderer.end();
         begin();
         draw(getDiceTextureRegion(dice.getNumber()), dice.getCell().getX()
-                        - GameScreen.DICE_SIZE / 2, dice.getCell().getY() - GameScreen.DICE_SIZE / 2,
-                GameScreen.DICE_SIZE, GameScreen.DICE_SIZE);
+                        - GameScreen.diceSize / 2, dice.getCell().getY() - GameScreen.diceSize / 2,
+                GameScreen.diceSize, GameScreen.diceSize);
         end();
     }
 

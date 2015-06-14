@@ -14,28 +14,22 @@ import com.tss.game.model.Board;
 
 public class GameScreen implements Screen, Commands {
 
-    public static final int WIDTH = 320;
-    public static final int HEIGHT = 480;
+    public static int width = 320;
+    public static int height = 480;
 
-    public static final int BOARD_SIZE = WIDTH;
+    public static int boardSize = width;
+    public static int boardYBegin = (height - width) / 2;
+    public static int boardYEnd = height - (height - width) / 2;
+    public static int chatHeight = boardYBegin;
+    public static int topHeight = boardYBegin;
 
-    public static final int BOARD_Y_BEGIN = (HEIGHT - WIDTH) / 2;
+    public static final float APOTHEM = (float) Math.cos(Math.PI / 6);
 
-    public static final int BOARD_Y_END = HEIGHT - (HEIGHT - WIDTH) / 2;
-
-    public static final int CHAT_HEIGHT = BOARD_Y_BEGIN;
-
-    public static final int TOP_HEIGHT = BOARD_Y_BEGIN;
-
-    public static final float apothem = (float) Math.cos(Math.PI / 6);
-
-    public static final float xUnit = BOARD_SIZE / 16;
-
-    public static final float yUnit = (BOARD_SIZE * apothem) / 24;
+    public static float xUnit = boardSize / 16;
+    public static float yUnit = (boardSize * APOTHEM) / 24;
+    public static float diceSize = xUnit * 0.9f;
 
     public static final int DICE_COUNT = 12;
-
-    public static final float DICE_SIZE = xUnit * 0.9f;
 
     public static final Color CMCOLOR = new Color(1f, 0.9f, 0f, 1);
     public static final Color CCCOLOR = new Color(1f, 0.2f, 0f, 1);
@@ -57,12 +51,14 @@ public class GameScreen implements Screen, Commands {
     GameRenderer batcher;
     GameProcessor controller;
     Board board;
-    public final Rectangle newGameButtonBounds;
+    Rectangle newGameButtonBounds;
     Rectangle rollButtonBounds;
     Rectangle giveUpButtonBounds;
     Vector3 touchPoint;
 
     public GameScreen(Client client) {
+        width = client.getWidth();
+        height = client.getHeight();
         this.client = client;
         this.board = new Board();
         this.controller = new GameProcessor();
@@ -70,11 +66,11 @@ public class GameScreen implements Screen, Commands {
         this.controller.setListener(board);
         batcher = client.getBatch();
         touchPoint = new Vector3();
-        guiCam = new OrthographicCamera(WIDTH, HEIGHT);
-        guiCam.position.set(WIDTH / 2, HEIGHT / 2, 0);
-        giveUpButtonBounds = new Rectangle(WIDTH / 6 - WIDTH / 24, BOARD_Y_END - TOP_HEIGHT / 4, WIDTH / 12, WIDTH / 12);
-        newGameButtonBounds = new Rectangle(WIDTH / 2 - WIDTH / 24, BOARD_Y_END - TOP_HEIGHT / 4, WIDTH / 12, WIDTH / 12);
-        rollButtonBounds = new Rectangle(WIDTH * 5 / 6 - WIDTH / 24, BOARD_Y_END - TOP_HEIGHT / 4, WIDTH / 12, WIDTH / 12);
+        guiCam = new OrthographicCamera(width, height);
+        guiCam.position.set(width / 2, height / 2, 0);
+        giveUpButtonBounds = new Rectangle(width / 6 - width / 24, boardYEnd - topHeight / 4, width / 12, width / 12);
+        newGameButtonBounds = new Rectangle(width / 2 - width / 24, boardYEnd - topHeight / 4, width / 12, width / 12);
+        rollButtonBounds = new Rectangle(width * 5 / 6 - width / 24, boardYEnd - topHeight / 4, width / 12, width / 12);
         //fps = new FPSLogger();
     }
 
@@ -84,12 +80,12 @@ public class GameScreen implements Screen, Commands {
 
     @Override
     public void render(float delta) {
-        update(delta);
+        update();
         draw();
         //fps.log();
     }
 
-    private void update(float delta) {
+    private void update() {
         if (Gdx.input.justTouched()) {
             guiCam.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(),
                     0));

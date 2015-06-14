@@ -11,6 +11,7 @@ public class IOSLauncher extends IOSApplication.Delegate {
     @Override
     protected IOSApplication createApplication() {
         IOSApplicationConfiguration config = new IOSApplicationConfiguration();
+        Client.device = Device.IOS;
         return new IOSApplication(new Client(), config);
     }
 
