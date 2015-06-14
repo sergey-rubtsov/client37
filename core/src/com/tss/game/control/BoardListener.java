@@ -7,6 +7,6 @@ public interface BoardListener {
 
     void take(Dice dice);
 
-    void touch(Cell cell);    
+    void touch(Cell cell);
 
 }

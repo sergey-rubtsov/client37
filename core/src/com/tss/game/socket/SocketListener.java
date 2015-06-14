@@ -1,4 +1,4 @@
-package com.tss.game.control;
+package com.tss.game.socket;
 
 public interface SocketListener {
 

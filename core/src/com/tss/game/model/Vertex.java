@@ -7,9 +7,9 @@ public class Vertex implements Point {
     public final float y;
 
     public Vertex(float x, float y) {
-	super();
-	this.x = x;
-	this.y = y;
+        super();
+        this.x = x;
+        this.y = y;
     }
 
     public float getX() {
@@ -19,5 +19,5 @@ public class Vertex implements Point {
     public float getY() {
         return y;
     }
-  
+
 }

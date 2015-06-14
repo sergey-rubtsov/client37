@@ -1,13 +1,13 @@
 package com.tss.game.model;
 
-import com.tss.game.Constants;
+import com.tss.game.view.GameScreen;
 
-public class Cell implements Point, Constants { 
+public class Cell implements Point {
 
-    public final static float y23 = yUnit;
-    public final static float x32 = xUnit;
+    public final static float y23 = GameScreen.yUnit;
+    public final static float x32 = GameScreen.xUnit;
     public final static float y31 = 0;
-    public final static float x13 = -2 * xUnit;
+    public final static float x13 = -2 * GameScreen.xUnit;
     public final static float det = y23 * x13 - x32 * y31;
     public final static float minD = Math.min(det, 0);
     public final static float maxD = Math.max(det, 0);
@@ -20,11 +20,11 @@ public class Cell implements Point, Constants {
     private int color;
 
     public void setColor(int color) {
-	if (color >= CELL_COLOR.length) {
-	    color = 0;
-	    return;
-	}
-	this.color = color;
+        if (color >= GameScreen.CELL_COLOR.length) {
+            color = 0;
+            return;
+        }
+        this.color = color;
     }
 
     private Cell[] neighbors;
@@ -43,51 +43,51 @@ public class Cell implements Point, Constants {
     private Vertex tl;
 
     public Cell(int index) {
-	this.index = index;
-	this.color = 0;
+        this.index = index;
+        this.color = 0;
     }
 
     public Cell(int index, int color) {
-	setColor(color);
-	this.index = index;
+        setColor(color);
+        this.index = index;
     }
 
     public int getIndex() {
-	return index;
+        return index;
     }
 
     public Cell[] getNeighbors() {
-	return neighbors;
+        return neighbors;
     }
 
     public void setNeighbors(Cell[] neighbors) {
-	this.neighbors = neighbors;
+        this.neighbors = neighbors;
     }
 
     public Dice getDice() {
-	return dice;
+        return dice;
     }
 
     public void setDice(Dice dice) {
-	this.dice = dice;
+        this.dice = dice;
     }
-    
+
     public void reset() {
-	this.dice.reset();
-	this.dice.setCell(null);
-	this.dice = null;
+        this.dice.reset();
+        this.dice.setCell(null);
+        this.dice = null;
     }
-    
+
     public boolean contains(float x, float y) {
-	return (x >= bl.x && x <= br.x && y >= bl.y && y <= tl.y) || 
-	barycentricTopTriangleContains(x, y, tr) ||
-	barycentricBottomTriangleContains(x, y, br);
+        return (x >= bl.x && x <= br.x && y >= bl.y && y <= tl.y) ||
+                barycentricTopTriangleContains(x, y, tr) ||
+                barycentricBottomTriangleContains(x, y, br);
     }
-    
-    private static boolean barycentricTopTriangleContains(float x, float y, Point p) {	
-	float dx = x - p.getX();
-	float dy = y - p.getY();
-	float a = y23 * dx + x32 * dy;
+
+    private static boolean barycentricTopTriangleContains(float x, float y, Point p) {
+        float dx = x - p.getX();
+        float dy = y - p.getY();
+        float a = y23 * dx + x32 * dy;
         if (a < minD || a > maxD)
             return false;
         float b = y31 * dx + x13 * dy;
@@ -96,13 +96,13 @@ public class Cell implements Point, Constants {
         float c = det - a - b;
         if (c < minD || c > maxD)
             return false;
-	return true;
+        return true;
     }
-    
-    private static boolean barycentricBottomTriangleContains(float x, float y, Point p) {	
-	float dx = x - p.getX();
-	float dy = y - p.getY();
-	float a = x32 * dy - y23 * dx;
+
+    private static boolean barycentricBottomTriangleContains(float x, float y, Point p) {
+        float dx = x - p.getX();
+        float dy = y - p.getY();
+        float a = x32 * dy - y23 * dx;
         if (a < invminD || a > invmaxD)
             return false;
         float b = y31 * dx + x13 * dy;
@@ -111,76 +111,76 @@ public class Cell implements Point, Constants {
         float c = invdet - a - b;
         if (c < invminD || c > invmaxD)
             return false;
-	return true;
+        return true;
     }
 
     public Vertex getT() {
-	return t;
+        return t;
     }
 
     public void setT(Vertex t) {
-	this.t = t;
+        this.t = t;
     }
 
     public Vertex getTR() {
-	return tr;
+        return tr;
     }
 
     public void setTR(Vertex tr) {
-	this.tr = tr;
+        this.tr = tr;
     }
 
     public Vertex getBR() {
-	return br;
+        return br;
     }
 
     public void setBR(Vertex br) {
-	this.br = br;
+        this.br = br;
     }
 
     public Vertex getB() {
-	return b;
+        return b;
     }
 
     public void setB(Vertex b) {
-	this.b = b;
+        this.b = b;
     }
 
     public Vertex getBL() {
-	return bl;
+        return bl;
     }
 
     public void setBL(Vertex bl) {
-	this.bl = bl;
+        this.bl = bl;
     }
 
     public Vertex getTL() {
-	return tl;
+        return tl;
     }
 
     public void setTL(Vertex tl) {
-	this.tl = tl;
+        this.tl = tl;
     }
 
     @Override
     public float getX() {
-	return x;
+        return x;
     }
 
     @Override
     public float getY() {
-	return y;
+        return y;
     }
 
     public void setX(float x) {
-	this.x = x;
+        this.x = x;
     }
 
     public void setY(float y) {
-	this.y = y;
+        this.y = y;
     }
 
     public int getColor() {
-	return color;
+        return color;
     }
 }

@@ -7,11 +7,11 @@ import com.badlogic.gdx.graphics.Color;
 public class Player {
 
     private String Id;
-    
+
     public boolean isMe;
-    
+
     int seat;
-    
+
     public Dice takenDice;
 
     public Dice getTakenDice() {
@@ -27,53 +27,53 @@ public class Player {
     private Color color;
 
     public String getId() {
-	return Id;
+        return Id;
     }
 
     public void setId(String id) {
-	Id = id;
+        Id = id;
     }
 
     public LinkedList<Dice> getDices() {
-	return dices;
+        return dices;
     }
 
     public Color getColor() {
-	return color;
+        return color;
     }
 
     public void setColor(Color color) {
-	this.color = color;
+        this.color = color;
     }
- 
+
     private void initDices() {
-	dices = new LinkedList<Dice>();
-	for (int i = 0; i < 12; i++) {
-	    dices.add(new Dice(this));
-	}
+        dices = new LinkedList<Dice>();
+        for (int i = 0; i < 12; i++) {
+            dices.add(new Dice(this));
+        }
     }
 
     public Player(String id, int seat) {
-	this.isMe = false;
-	this.Id = id;
-	this.seat = seat;
-	this.color = new Color(1f, 0, 0, 1);
-	initDices();
+        this.isMe = false;
+        this.Id = id;
+        this.seat = seat;
+        this.color = new Color(1f, 0, 0, 1);
+        initDices();
     }
-    
+
     public Player(String id, Color color, int seat) {
-	this.isMe = false;
-	this.Id = id;
-	this.seat = seat;
-	this.color = color;
-	initDices();
+        this.isMe = false;
+        this.Id = id;
+        this.seat = seat;
+        this.color = color;
+        initDices();
     }
-    
+
     public Player(String id, boolean isMe, int seat) {
-	this.isMe = isMe;	
-	this.Id = id;
-	this.seat = seat;
-	this.color = new Color(0, 1f, 0, 1);
-	initDices();
+        this.isMe = isMe;
+        this.Id = id;
+        this.seat = seat;
+        this.color = new Color(0, 1f, 0, 1);
+        initDices();
     }
 }

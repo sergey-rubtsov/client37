@@ -9,24 +9,27 @@ public class Client extends Game {
 
     GameRenderer batch;
 
+    public Client() {
+    }
+
     @Override
     public void create() {
-	Assets.load();
-	setBatch(new GameRenderer());
-	setScreen(new GameScreen(this));
+        Assets.load();
+        setBatch(new GameRenderer());
+        setScreen(new GameScreen(this));
     }
 
     @Override
     public void render() {
-	super.render();
+        super.render();
     }
 
     public GameRenderer getBatch() {
-	return batch;
+        return batch;
     }
 
     public void setBatch(GameRenderer batch) {
-	this.batch = batch;
+        this.batch = batch;
     }
 
 }

@@ -6,11 +6,11 @@ import com.tss.game.Client;
 
 public class DesktopLauncher {
     public static void main(String[] arg) {
-	LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-	config.vSyncEnabled = true;
-	config.title = "37.6";
-	config.height = 480;
-	config.width = 320;
-	new LwjglApplication(new Client(), config);
+        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+        config.vSyncEnabled = true;
+        config.title = "37.6";
+        config.height = 480;
+        config.width = 320;
+        new LwjglApplication(new Client(), config);
     }
 }

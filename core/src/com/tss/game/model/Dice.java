@@ -7,19 +7,23 @@ import com.badlogic.gdx.graphics.Color;
 public class Dice {
 
     public enum Number {
-	NULL, ONE, TWO, THREE, FOUR, FIVE, SIX
-    };
+        NULL, ONE, TWO, THREE, FOUR, FIVE, SIX
+    }
+
+    ;
 
     public enum Status {
-	LOCKED, UNLOCKED
-    };
-    
+        LOCKED, UNLOCKED
+    }
+
+    ;
+
     private Color color;
 
     private Status status;
 
     private Cell cell;
-    
+
     private Number number;
 
     private Player owner;
@@ -29,56 +33,56 @@ public class Dice {
     public float x;
 
     public Status getStatus() {
-	return status;
+        return status;
     }
 
     public void setStatus(Status status) {
-	this.status = status;
+        this.status = status;
     }
 
     public Number getNumber() {
-	return number;
+        return number;
     }
 
     public void setNumber(Number number) {
-	this.number = number;
+        this.number = number;
     }
 
     public Dice(Player owner) {
-	this.owner = owner;
-	this.color = owner.getColor();
-	this.number = Number.NULL;
-	this.status = Status.UNLOCKED;
+        this.owner = owner;
+        this.color = owner.getColor();
+        this.number = Number.NULL;
+        this.status = Status.UNLOCKED;
     }
 
     public Number roll() {
-	Random random = new Random();
-	int num = random.nextInt(6) + 1;
-	setNumber(Number.values()[num]);
-	return this.number;
+        Random random = new Random();
+        int num = random.nextInt(6) + 1;
+        setNumber(Number.values()[num]);
+        return this.number;
     }
 
     public Player getOwner() {
-	return owner;
+        return owner;
     }
 
     public void setOwner(Player owner) {
-	this.owner = owner;
+        this.owner = owner;
     }
 
     public Cell getCell() {
-	return cell;
+        return cell;
     }
 
     public void setCell(Cell cell) {
-	this.cell = cell;
+        this.cell = cell;
     }
 
     public Color getColor() {
-	return color;
+        return color;
     }
-    
+
     public void reset() {
-	
+
     }
 }
