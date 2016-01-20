@@ -1,6 +1,8 @@
 # 37.6
 
-Simple client for http://376.su/ game server. 
+37.6 is an addictive brand new abstract board game.
+
+client37 is a simple client for http://376.su/ game server. 
 Uses libgdx and websockets.
 
 Not finished yet, unfortunately. Necessary to finish the design of the interface.
